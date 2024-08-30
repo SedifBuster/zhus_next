@@ -1,14 +1,17 @@
+import FormRecord from "./components/formRecord";
+import QrTooltip from "./components/qrTooltip";
 
-
-export default function Form(
+export
+  default function Form(
 ) {
   return (
-    <section className="grid grid-cols-2 gap-1">
+    <section className="grid grid-cols-2 gap-22">
       {/** form*/}
-      <div>das</div>
+        <FormRecord />
       {/** qr and tooltip*/}
-      <div>sad</div>
-
+      <div>
+        <QrTooltip />
+      </div>
     </section>
   )
 }
