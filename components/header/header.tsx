@@ -41,6 +41,7 @@ export
                   hover:dark:border-neutral-700
                   hover:dark:bg-neutral-800/30
                 "
+                key={route.label}
               >
                 <h2 className="text-xl">
                   {route.label}{" "}

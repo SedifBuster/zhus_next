@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,39 +18,64 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const formSchema = z.object({
-    department: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
-    name: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+    department: z.string(),
+    name: z.string().min(3, {
+        message: "Ф.И.О должно быть больше двух символов.",
     }),
     date: z.date(),
     place: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+        message: "Опишите место события.",
     }),
     event: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+        message: "Выберите вид события.",
       }),
     circs: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+        message: "При каких обстоятельствах.",
       }),
     gauge: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+        message: "Какие меры были предприняты.",
       }),
-    note: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
-      }),
+    note: z.string(),
     liable: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+      message: "Больше двух символов.",
       }),
-      cause: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+    cause: z.string().min(2, {
+        message: "Опишите причину возникновения.",
       }),
   })
 
 export
   default function FormRecord(
 ) {
+
+  const departments = [
+    'Поликлиника',
+    'Приемное',
+    'Пульмонология',
+    'Реабилитация',
+    'Реанимация',
+    'Лаборатория',
+    'Неврология',
+    'ОПП',
+    'ПАО',
+    'СЭО',
+    'Терапия',
+    'Хирургия',
+    'Рентгенология',
+    'Администрация',
+    'АХО',
+  ]
+
+  const problems = [
+    'Идентификация личности пациента',
+    'Падение',
+    'Пролежни',
+    'Событие, связаное с медицинским оборудованием или изделием',
+    'Событие, связанное с лекартсвенным средством',
+    'Инфекционное или паразитарное заболевание',
+    'ИСМП (инфекции, связанные с медецинской помощью)',
+    'Другое нежелательное событие',
+  ]
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,20 +103,49 @@ export
     <section>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-
           <FormField
             control={form.control}
-            name="name"
+            name="department"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ф.И.О. пациента*</FormLabel>
+                <FormLabel>Выберите свое отделение*</FormLabel>
                 <FormControl>
-                  <Input placeholder="Иванов И.И." {...field} />
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="не выбрано" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {
+                        departments.map(dep => {
+                          return <SelectItem key={dep} value={dep}>{dep}</SelectItem>
+                        })
+                      }
+                    </SelectContent>
+                </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          {
+            !form.getFieldState('department').isDirty
+              ?
+                ''
+              :
+              <div>
+              <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ф.И.О. пациента*</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Иванов И.И." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
           <FormField
             control={form.control}
@@ -117,12 +170,14 @@ export
                 <FormControl>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Theme" />
+                    <SelectValue placeholder="не выбрано" />
                     </SelectTrigger>
                     <SelectContent>
-                     <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                     <SelectItem value="system">System</SelectItem>
+                      {
+                        problems.map(problem => {
+                            return <SelectItem key={problem} value={problem}>{problem}</SelectItem>
+                        })
+                      }
                     </SelectContent>
                 </Select>
                 </FormControl>
@@ -133,7 +188,7 @@ export
           />
           <FormField
             control={form.control}
-            name="circs"
+            name="cause"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Причина возникновения нежелательного события*</FormLabel>
@@ -147,7 +202,7 @@ export
           />
           <FormField
             control={form.control}
-            name="gauge"
+            name="circs"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Описание обстоятельств, при которых произошло нежелательное событие*</FormLabel>
@@ -161,7 +216,7 @@ export
           />
           <FormField
             control={form.control}
-            name="note"
+            name="gauge"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Принятые меры по устранению последствий нежелательного события*</FormLabel>
@@ -175,7 +230,7 @@ export
           />
           <FormField
             control={form.control}
-            name="liable"
+            name="note"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Примечание</FormLabel>
@@ -189,7 +244,7 @@ export
           />
           <FormField
             control={form.control}
-            name="cause"
+            name="liable"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Отвественный*</FormLabel>
@@ -201,7 +256,10 @@ export
               
             )}
           />
+        
           <Button type="submit">Отправить</Button>
+          </div>
+          }
         </form>
       </Form>
     </section>
