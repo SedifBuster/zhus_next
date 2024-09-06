@@ -7,7 +7,6 @@ export
 ) {
 
   const routes = useRoutes()
-  console.log(routes)
 
   return (
     <div className="flex border-b shadow-[0_50px_60px_-15px_rgba(0,0,0,0.07)] pl-10 pr-10 pb-2">

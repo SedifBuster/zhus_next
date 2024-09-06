@@ -38,10 +38,10 @@ export
     .catch(error => console.error('Error:', error));
 
 
-    
+
   return (
-    <section className="grid grid-cols-2 gap-22">
-      {/** form*/}
+    <section className="flex justify-between p-2">
+      {/** form grid grid-cols-2  gap-22*/}
         <FormRecord />
       {/** qr and tooltip*/}
         <QrTooltip />

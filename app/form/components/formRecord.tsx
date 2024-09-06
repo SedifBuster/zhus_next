@@ -16,6 +16,11 @@ import {
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
+import { CalendarIcon } from "@radix-ui/react-icons"
+import { format } from "date-fns"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 const formSchema = z.object({
     department: z.string(),
@@ -100,7 +105,7 @@ export
   }
 
   return (
-    <section>
+    <section className="w-2/4">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
@@ -111,7 +116,7 @@ export
                 <FormLabel>Выберите свое отделение*</FormLabel>
                 <FormControl>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-[320px]">
                     <SelectValue placeholder="не выбрано" />
                     </SelectTrigger>
                     <SelectContent>
@@ -133,6 +138,40 @@ export
                 ''
               :
               <div>
+                <div className="grid grid-cols-2 gap-2">
+                <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                <FormItem className="flex flex-col pt-2">
+                <FormLabel className="pb-0.5">Выберите время*</FormLabel>
+                  <FormControl>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant={"outline"}
+                                className={cn(
+                                    "w-[320px] justify-start text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                )}
+                             >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                     {field.value ? format(field.value, "PPP") : <span>Выберите время*</span>}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                         mode="single"
+                         selected={field.value}
+                         onSelect={field.onChange}
+                         initialFocus
+                        />
+                        </PopoverContent>
+                </Popover>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
               <FormField
               control={form.control}
               name="name"
@@ -140,7 +179,7 @@ export
                 <FormItem>
                   <FormLabel>Ф.И.О. пациента*</FormLabel>
                   <FormControl>
-                    <Input placeholder="Иванов И.И." {...field} />
+                    <Input className="w-[320px]" placeholder="Иванов И.И." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -154,7 +193,7 @@ export
               <FormItem>
                 <FormLabel>Место нежелательного события*</FormLabel>
                 <FormControl>
-                  <Input placeholder="Неврологическое отделение, палата 1334" {...field} />
+                  <Input className="w-[320px]" placeholder="Неврологическое отделение, палата 1334" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -169,7 +208,7 @@ export
                 <FormLabel>Вид нежелательного события*</FormLabel>
                 <FormControl>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-[320px]">
                     <SelectValue placeholder="не выбрано" />
                     </SelectTrigger>
                     <SelectContent>
@@ -186,6 +225,7 @@ export
               
             )}
           />
+          </div>
           <FormField
             control={form.control}
             name="cause"
@@ -193,7 +233,7 @@ export
               <FormItem>
                 <FormLabel>Причина возникновения нежелательного события*</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="shadcn" {...field} />
+                  <Textarea placeholder="Событие возникло..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -207,7 +247,7 @@ export
               <FormItem>
                 <FormLabel>Описание обстоятельств, при которых произошло нежелательное событие*</FormLabel>
                 <FormControl>
-                <Textarea placeholder="shadcn" {...field} />
+                <Textarea placeholder="Событие произошло при..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -221,7 +261,7 @@ export
               <FormItem>
                 <FormLabel>Принятые меры по устранению последствий нежелательного события*</FormLabel>
                 <FormControl>
-                <Textarea placeholder="shadcn" {...field} />
+                <Textarea placeholder="Были предприняты..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -235,7 +275,7 @@ export
               <FormItem>
                 <FormLabel>Примечание</FormLabel>
                 <FormControl>
-                <Textarea placeholder="shadcn" {...field} />
+                <Textarea placeholder="В событии..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -249,7 +289,7 @@ export
               <FormItem>
                 <FormLabel>Отвественный*</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input className="w-[320px]" placeholder="Никитов В.В." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -257,7 +297,7 @@ export
             )}
           />
         
-          <Button type="submit">Отправить</Button>
+          <Button className="mt-4" type="submit">Отправить</Button>
           </div>
           }
         </form>
