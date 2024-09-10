@@ -12,8 +12,13 @@ import {
   } from "@/components/ui/table"
 import { IZhus } from "../page"
 
-export function ZhusTable({onFetchData}: {onFetchData: IZhus[]}) {
-
+export
+  function ZhusTable({
+    onFetchData
+  }: {
+    onFetchData: IZhus[]
+  }
+) {
   const namesSet = new Set()
   let depsNamesArr: string[] | unknown[] = []
 
@@ -38,14 +43,11 @@ export function ZhusTable({onFetchData}: {onFetchData: IZhus[]}) {
     return arr
   }
 
-  const finalArr = onSetDeps()
-
-  console.log(finalArr) //лекарственным и лекарсвтенным
-
+  let finalArr = onSetDeps()
 
     return (
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableCaption>Лист нежелательных событий.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Отделения</TableHead>
@@ -53,7 +55,7 @@ export function ZhusTable({onFetchData}: {onFetchData: IZhus[]}) {
             <TableHead className="text-center">Пролежни</TableHead>
             <TableHead className="text-center">Идентификация личности пациента</TableHead>
             <TableHead className="text-center">Событие, связанное с медицинским оборудованием или изделием</TableHead>
-            <TableHead className="text-center">Событие, связанное с лекартсвенным средством</TableHead>
+            <TableHead className="text-center">Событие, связанное с лекарственным средством</TableHead>
             <TableHead className="text-center">Инфекционное или паразитарное заболевание</TableHead>
             <TableHead className="text-center">ИСМП (инфекции, связанные с медицинской помощью)</TableHead>
             <TableHead>Другое</TableHead>
@@ -64,52 +66,70 @@ export function ZhusTable({onFetchData}: {onFetchData: IZhus[]}) {
             {
             finalArr
             ?
-              finalArr.map((task: any) => (
-                <TableRow key={task.department}>
-                  <TableCell className="font-medium">{task.department}</TableCell>
-                  <TableCell className="text-center">
-                    {
-                      task.logs
-                        .filter((log: IZhus) => log.event === 'Падение').length
-                    }
-                  </TableCell>
+              finalArr.map((task: any) => {
 
-                  <TableCell className="text-center">
-                    {task.logs.filter((log: IZhus) => log.event === 'Пролежни').length}
-                  </TableCell>
+                let reabEng = finalArr.filter(log => log.department === "Reabilitation")[0]
+                if(reabEng)
+                if(task.department === "Реабилитация")
+                    task.logs = [...task.logs,...reabEng.logs]
 
-                  <TableCell className="text-center">
-                    {task.logs.filter((log: IZhus) => log.event === 'Идентификация личности пациента').length}
-                  </TableCell>
-                  
-                  <TableCell className="text-center">
-                    {task.logs.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием').length}
-                  </TableCell>
-                  
-                  <TableCell className="text-center">
-                    {task.logs.filter((log: IZhus) => log.event === 'Событие, связанное с лекартсвенным средством').length}
-                  </TableCell>
-                  
-                  <TableCell className="text-center">
-                    {task.logs.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание').length}
-                  </TableCell>
+                let OPMP = finalArr.filter(log => log.department === "ОПМП")[0]
+                if(OPMP)
+                if(task.department === "ОПП")
+                  task.logs = [...task.logs, ...OPMP.logs]
+                
 
-                  <TableCell className="text-center">
-                    {task.logs.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)').length}
-                  </TableCell>
+                if(task.department !== 'ОПМП' && task.department !== 'Reabilitation')
 
-                  <TableCell className="text-center">
-                    {task.logs.filter((log: IZhus) => log.event === 'Другое нежелательное событие').length}
-                  </TableCell>
+                return <TableRow key={task.department}>
 
-                  <TableCell className="text-center">
-                    {task.logs.length}
-                  </TableCell>
-                </TableRow>
-              )
+                <TableCell className="font-medium">
+                  {task.department}
+                </TableCell>
+                <TableCell className="text-center">
+                  {
+                    task.logs
+                      .filter((log: IZhus) => log.event === 'Падение').length
+                  }
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {task.logs.filter((log: IZhus) => log.event === 'Пролежни').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {task.logs.filter((log: IZhus) => log.event === 'Идентификация личности пациента').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {task.logs.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {task.logs.filter((log: IZhus) => log.event === 'Событие, связанное с лекартсвенным средством'
+                                                                   || log.event === 'Событие, связанное с лекарственным средством').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {task.logs.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {task.logs.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {task.logs.filter((log: IZhus) => log.event === 'Другое нежелательное событие').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {task.logs.length}
+                </TableCell>
+              </TableRow>
+              }
             )
             :
-            ''
+            'Случаев не найдено'
             /**onFetchData.map((task:IZhus) => (
             <TableRow key={task.id}>
               <TableCell className="font-medium">{task.department}</TableCell>
@@ -127,8 +147,46 @@ export function ZhusTable({onFetchData}: {onFetchData: IZhus[]}) {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
+            <TableCell>Итого</TableCell>
+            <TableCell className="text-center">
+                  {
+                    onFetchData
+                      .filter((log: IZhus) => log.event === 'Падение').length
+                  }
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {onFetchData.filter((log: IZhus) => log.event === 'Пролежни').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {onFetchData.filter((log: IZhus) => log.event === 'Идентификация личности пациента').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {onFetchData.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {onFetchData.filter((log: IZhus) => log.event === 'Событие, связанное с лекартсвенным средством'
+                                                                   || log.event === 'Событие, связанное с лекарственным средством').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {onFetchData.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {onFetchData.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {onFetchData.filter((log: IZhus) => log.event === 'Другое нежелательное событие').length}
+                </TableCell>
+
+                <TableCell className="text-center">
+                  {onFetchData.length}
+                </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
