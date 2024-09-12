@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table"
 import { IZhus } from "../page"
 import { DepartmentTable } from "./departmentTable"
+import { Dispatch, SetStateAction, useState } from "react"
 
 export
   function ZhusTable({
@@ -49,6 +50,18 @@ export
 
   let finalArr = onSetDeps()
 
+  const onClickCell = (/*logsArr: IZhus[], logName: string,*/ trigger: boolean, onChangeTrigger: Dispatch<SetStateAction<boolean>>) => {
+
+    if(trigger) onChangeTrigger(!trigger)
+    else {
+      onChangeTrigger(true)
+
+    }
+
+    
+
+  }
+
   return (
     <Table>
       <TableCaption>Лист нежелательных событий.</TableCaption>
@@ -71,6 +84,9 @@ export
           finalArr
           ?
           finalArr.map((task: any) => {
+
+            const [isOpen, setOpen] = useState<boolean>(false)
+
             let reabEng = finalArr.filter(log => log.department === "Reabilitation")[0]
             if(reabEng)
               if(task.department === "Реабилитация")
@@ -90,7 +106,7 @@ export
                   {task.department}
                 </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center" onClick={() => onClickCell(/*'Падение',*/ isOpen, setOpen)}>
                   {task.logs.filter((log: IZhus) => log.event === 'Падение').length}
                 </TableCell>
 
@@ -129,7 +145,7 @@ export
 
               </TableRow>
 
-              <DepartmentTable />
+              {isOpen? <DepartmentTable /> : null}
               </>
               }
             )
