@@ -13,6 +13,7 @@ import {
 import { IZhus } from "../page"
 import { DepartmentTable } from "./departmentTable"
 import { Dispatch, SetStateAction, useState } from "react"
+import clsx from "clsx"
 
 export
   function ZhusTable({
@@ -50,15 +51,20 @@ export
 
   let finalArr = onSetDeps()
 
-  const onClickCell = (/*logsArr: IZhus[], logName: string,*/ trigger: boolean, onChangeTrigger: Dispatch<SetStateAction<boolean>>) => {
+  const onClickCell = (
+    logs: IZhus[], onChangeLogs: Dispatch<SetStateAction<IZhus[] | undefined>>,
+    trigger: boolean, onChangeTrigger: Dispatch<SetStateAction<boolean>>
+    ) => {
 
-    if(trigger) onChangeTrigger(!trigger)
-    else {
-      onChangeTrigger(true)
-
+    if(trigger) {
+      onChangeTrigger(!trigger)
+      onChangeLogs([])
     }
-
-    
+    else {
+      if(logs.length !== 0)
+      onChangeTrigger(true)
+      onChangeLogs(logs)
+    }
 
   }
 
@@ -86,6 +92,7 @@ export
           finalArr.map((task: any) => {
 
             const [isOpen, setOpen] = useState<boolean>(false)
+            const [isDepFilter, setDepFilter] = useState<IZhus[]>()
 
             let reabEng = finalArr.filter(log => log.department === "Reabilitation")[0]
             if(reabEng)
@@ -102,50 +109,75 @@ export
             return <>
               <TableRow key={task.department}>
 
-                <TableCell className="font-medium hover:bg-green-600 hover:text-white">
+                <TableCell className="font-medium">
                   {task.department}
                 </TableCell>
 
-                <TableCell className="text-center" onClick={() => onClickCell(/*'Падение',*/ isOpen, setOpen)}>
+                <TableCell className={clsx("text-center hover:bg-green-600 hover:text-white cursor-pointer", isDepFilter && isDepFilter[0]? isDepFilter[0].event === 'Падение' && 'bg-green-600 text-white' : '')}
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Падение'), setDepFilter, isOpen, setOpen)}
+                >
                   {task.logs.filter((log: IZhus) => log.event === 'Падение').length}
                 </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Пролежни'), setDepFilter, isOpen, setOpen)}
+                >
                   {task.logs.filter((log: IZhus) => log.event === 'Пролежни').length}
                 </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Идентификация личности пациента'), setDepFilter, isOpen, setOpen)}
+                >
                   {task.logs.filter((log: IZhus) => log.event === 'Идентификация личности пациента').length}
                 </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием'), setDepFilter, isOpen, setOpen)}
+                >
                   {task.logs.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием').length}
                 </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Событие, связанное с лекартсвенным средством'
+                    || log.event === 'Событие, связанное с лекарственным средством'), setDepFilter, isOpen, setOpen)}
+                >
                   {task.logs.filter((log: IZhus) => log.event === 'Событие, связанное с лекартсвенным средством'
                                                                    || log.event === 'Событие, связанное с лекарственным средством').length}
                 </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание'), setDepFilter, isOpen, setOpen)}
+                >
                   {task.logs.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание').length}
                 </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)'), setDepFilter, isOpen, setOpen)}
+                >
                   {task.logs.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)').length}
                 </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Другое нежелательное событие'), setDepFilter, isOpen, setOpen)}
+                >
                   {task.logs.filter((log: IZhus) => log.event === 'Другое нежелательное событие').length}
                 </TableCell>
 
-                <TableCell className="text-center">
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs, setDepFilter, isOpen, setOpen)}
+                >
                   {task.logs.length}
                 </TableCell>
 
               </TableRow>
 
-              {isOpen? <DepartmentTable /> : null}
+              {
+                isOpen
+                ?
+                <DepartmentTable logs={isDepFilter}/>
+                :
+                null
+              }
               </>
               }
             )

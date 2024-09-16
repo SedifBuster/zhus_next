@@ -10,7 +10,10 @@ export
   logs?: IZhus[]
   }
 ) {
-  return  <><TableRow className="">
+
+  console.log(logs)
+
+  return  <><TableRow className="bg-green-200">
     <TableHead className="font-medium">дата</TableHead>
     <TableHead>имя пациента и дата рождения</TableHead>
     <TableHead>место нежелательного события</TableHead>
@@ -22,18 +25,28 @@ export
     <TableHead>ответственный</TableHead>
     <TableHead>комментарий</TableHead>
   </TableRow>
-  <TableRow className="">
-    <TableCell className="font-medium">дата</TableCell>
-    <TableCell>имя пациента и дата рождения</TableCell>
-    <TableCell>место нежелательного события</TableCell>
-    <TableCell>вид нежелательного события</TableCell>
-    <TableCell>причина возникновения неж события</TableCell>
-    <TableCell>описание обстоятельств</TableCell>
-    <TableCell>принятые меры</TableCell>
-    <TableCell>примечание</TableCell>
-    <TableCell>ответственный</TableCell>
-    <TableCell>комментарий</TableCell>
-  </TableRow>
+  {
+    logs
+    ?
+    logs.map((log) => {
+      return     <TableRow className="bg-green-50">
+      <TableCell className="font-medium">{log.date.toString()}</TableCell>
+      <TableCell>{log.name} и дата рождения</TableCell>
+      <TableCell>{log.place}</TableCell>
+      <TableCell>{log.event}</TableCell>
+      <TableCell>{log.cause}</TableCell>
+      <TableCell>{log.circs}</TableCell>
+      <TableCell>{log.gauge}</TableCell>
+      <TableCell>{log.note}</TableCell>
+      <TableCell>{log.liable}</TableCell>
+      <TableCell>{log.comment}</TableCell>
+    </TableRow>
+    })
+
+    :
+    'событий не обнаружено'
+  }
+
   </>
 
 }

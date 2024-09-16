@@ -10,7 +10,7 @@ export function ZhusJournal({onFetchedData}: {onFetchedData: IZhus[]}) {
 
     const [fetchedData] = useState<IZhus[]>(onFetchedData)
 
-    return <div>
+    return <div className="">
        <h1>КГБУЗ «ВЛАДИВОСТОКСКАЯ КЛИНИЧЕСКАЯ БОЛЬНИЦА № 4»</h1>
       <p>ОТЧЕТ ПО НЖС С
         август 30-го 04:02 дня
