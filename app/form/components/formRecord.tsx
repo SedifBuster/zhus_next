@@ -100,9 +100,9 @@ export
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+
     console.log(values)
+    form.reset()
   }
 
   return (
@@ -116,9 +116,9 @@ export
               <FormItem>
                 <FormLabel>Выберите свое отделение*</FormLabel>
                 <FormControl>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                   <SelectTrigger className="w-[320px]">
-                    <SelectValue placeholder="не выбрано" />
+                    <SelectValue placeholder={"не выбрано"} />
                     </SelectTrigger>
                     <SelectContent>
                       {
@@ -173,7 +173,7 @@ export
                 </FormItem>
               )}
             />
-              <FormField
+            <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
@@ -185,8 +185,7 @@ export
                   <FormMessage />
                 </FormItem>
               )}
-            />
-
+          />
           <FormField
             control={form.control}
             name="place"
@@ -198,7 +197,6 @@ export
                 </FormControl>
                 <FormMessage />
               </FormItem>
-              
             )}
           />
           <FormField
@@ -223,7 +221,6 @@ export
                 </FormControl>
                 <FormMessage />
               </FormItem>
-              
             )}
           />
           </div>
@@ -238,7 +235,6 @@ export
                 </FormControl>
                 <FormMessage />
               </FormItem>
-              
             )}
           />
           <FormField
@@ -252,7 +248,6 @@ export
                 </FormControl>
                 <FormMessage />
               </FormItem>
-              
             )}
           />
           <FormField
@@ -266,7 +261,6 @@ export
                 </FormControl>
                 <FormMessage />
               </FormItem>
-              
             )}
           />
           <FormField
@@ -280,7 +274,6 @@ export
                 </FormControl>
                 <FormMessage />
               </FormItem>
-              
             )}
           />
           <FormField
@@ -294,10 +287,8 @@ export
                 </FormControl>
                 <FormMessage />
               </FormItem>
-              
             )}
           />
-        
           <Button className="mt-4" type="submit">Отправить</Button>
           </div>
           }

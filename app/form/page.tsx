@@ -37,8 +37,6 @@ export
     .then(data => console.log('Data received:', data))
     .catch(error => console.error('Error:', error));
 
-
-
   return (
     <section className="flex justify-between p-2">
       {/** form grid grid-cols-2  gap-22*/}
