@@ -24,7 +24,7 @@ export
       border-transparent
       px-5 py-4
       transition-colors
-    hover:border-green-500
+      hover:border-primary
     hover:bg-green-100
     hover:dark:border-neutral-700
     hover:dark:bg-neutral-800/30

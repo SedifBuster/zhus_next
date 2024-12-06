@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   description: "КГБУЗ «ВЛАДИВОСТОКСКАЯ КЛИНИЧЕСКАЯ БОЛЬНИЦА № 4»",
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -18,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={inter.className}>
-        <main className="flex min-h-screen flex-col p-10">
+        <main className="flex min-h-screen flex-col ">
           <Header/>
           {children}
         </main>

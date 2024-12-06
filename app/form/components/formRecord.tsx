@@ -1,10 +1,11 @@
-'use client'
+"use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { ru } from "date-fns/locale"
 
 import {
   Form,
@@ -21,6 +22,7 @@ import { CalendarIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { DateTimePicker } from "@/components/dateTime/dateTimePicker"
 
 const formSchema = z.object({
     department: z.string(),
@@ -107,6 +109,7 @@ export
 
   return (
     <section className="w-2/4">
+          
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
@@ -140,6 +143,7 @@ export
               :
               <div>
                 <div className="grid grid-cols-2 gap-2">
+               {/** <DateTimePicker form={form}/> */}
                 <FormField
                   control={form.control}
                   name="date"
@@ -157,7 +161,7 @@ export
                                 )}
                              >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                     {field.value ? format(field.value, "PPP") : <span>Выберите время*</span>}
+                     {field.value ? format(field.value, "PPP", {locale: ru}) : <span>Выберите время*</span>}
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -166,6 +170,7 @@ export
                          selected={field.value}
                          onSelect={field.onChange}
                          initialFocus
+                         locale={ru}
                         />
                         </PopoverContent>
                 </Popover>
@@ -231,7 +236,7 @@ export
               <FormItem>
                 <FormLabel>Причина возникновения нежелательного события*</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Событие возникло..." {...field} />
+                  <Textarea placeholder="Событие возникло..." className="w-[670px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -244,7 +249,7 @@ export
               <FormItem>
                 <FormLabel>Описание обстоятельств, при которых произошло нежелательное событие*</FormLabel>
                 <FormControl>
-                <Textarea placeholder="Событие произошло при..." {...field} />
+                <Textarea placeholder="Событие произошло при..." className="w-[670px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -257,7 +262,7 @@ export
               <FormItem>
                 <FormLabel>Принятые меры по устранению последствий нежелательного события*</FormLabel>
                 <FormControl>
-                <Textarea placeholder="Были предприняты..." {...field} />
+                <Textarea placeholder="Были предприняты..." className="w-[670px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -270,7 +275,7 @@ export
               <FormItem>
                 <FormLabel>Примечание</FormLabel>
                 <FormControl>
-                <Textarea placeholder="В событии..." {...field} />
+                <Textarea placeholder="В событии..." className="w-[670px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

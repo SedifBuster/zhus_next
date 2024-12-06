@@ -36,9 +36,14 @@ export
   fetchData(apiUrl)
     .then(data => console.log('Data received:', data))
     .catch(error => console.error('Error:', error));
+    //время сделать с часами
+    //оптимизировать страницу таблицы придумать что то с кол-вом получаемых случаев
+    //графики? https://ui.shadcn.com/docs/components/chart
+    //https://ui.shadcn.com/docs/components/toast
+    //прогресс бар при загрузке страницы https://ui.shadcn.com/docs/components/progress
 
   return (
-    <section className="flex justify-between p-2">
+    <section className="flex flex-col justify-between p-2 container">
       {/** form grid grid-cols-2  gap-22*/}
         <FormRecord />
       {/** qr and tooltip*/}
