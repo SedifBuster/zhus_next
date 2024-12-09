@@ -1,152 +1,66 @@
 "use client";
+ 
+import * as React from "react";
+import { Label } from "@/components/ui/label";
+import { TimePickerInput } from "../ui/time-picker-input";
+import { HiOutlineClock } from "react-icons/hi2";
 
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
-
-import { cn } from "../../lib/utils";
-import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { ScrollArea } from "../ui/scroll-area";
-import { UseFormReturn } from "react-hook-form";
-import { ru } from "date-fns/locale";
-
-export function DateTimePicker(
-  {
-    form
-  }: {
-    form: UseFormReturn<
-      {
-        name: string;
-        date: Date;
-        department: string;
-        place: string;
-        event: string;
-        circs: string;
-        gauge: string;
-        note: string;
-        liable: string;
-        cause: string;
-      }, any, undefined
-    >
-  }
-) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [time, setTime] = useState<string>("05:00");
-  const [date, setDate] = useState<Date | null>(null);
-
-  return <FormField
-    control={form.control}
-    name="date"
-    render={({ field }) => (
-      <FormItem className="flex flex-col pt-2">
-        <FormLabel className="pb-0.5">Выберите время*</FormLabel>
-        <FormControl>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-[320px] justify-start text-left font-normal",
-                  !field.value && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {field.value ? (format(field.value, "PPP", {locale: ru}))  : <span>Выберите время*</span>}  {time}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={field.value}
-                onSelect={field.onChange}
-                initialFocus
-                locale={ru}
-              />
-              <Select
-                defaultValue={time!}
-                onValueChange={(e) => {
-                  setTime(e);
-                  if (date) {
-                    const [hours, minutes] = e.split(":");
-                    const newDate = new Date(date.getTime());
-                    newDate.setHours(parseInt(hours), parseInt(minutes));
-                    setDate(newDate);
-                    field.onChange(newDate);
-                  }
-                }}
-                open={true}
-              >
-              <SelectTrigger className="font-normal focus:ring-0 w-[120px] my-4 mr-2">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="border-none shadow-none mr-2 fixed top-2 left-0">
-                <ScrollArea className="h-[15rem]">
-                  {Array.from({ length: 96 }).map((_, i) => {
-                    const hour = Math.floor(i / 4)
-                      .toString()
-                       .padStart(2, "0");
-                    const minute = ((i % 4) * 15)
-                      .toString()
-                      .padStart(2, "0");
-                    return (
-                      <SelectItem key={i} value={`${hour}:${minute}`}>
-                        {hour}:{minute}
-                      </SelectItem>
-                    );
-                  })}
-                </ScrollArea>
-              </SelectContent>
-              </Select>
-            </PopoverContent>
-          </Popover>
-        </FormControl>
-              <Popover open={isOpen} onOpenChange={setIsOpen}>
-                <PopoverContent
-                  className="w-auto p-0 flex items-start"
-                  align="start"
-                >
-                  <Calendar
-                    mode="single"
-                    captionLayout="dropdown"
-                    selected={date || field.value}
-                    onSelect={(selectedDate) => {
-                      const [hours, minutes] = time?.split(":")!;
-                      selectedDate?.setHours(
-                        parseInt(hours),
-                        parseInt(minutes)
-                      );
-                      setDate(selectedDate!);
-                      field.onChange(selectedDate);
-                    }}
-                    onDayClick={() => setIsOpen(false)}
-                    fromYear={2000}
-                    toYear={new Date().getFullYear()}
-                    disabled={(date) =>
-                      Number(date) < Date.now() - 1000 * 60 * 60 * 24 ||
-                      Number(date) > Date.now() + 1000 * 60 * 60 * 24 * 30
-                    }
-                  />
-                  
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
+ 
+interface TimePickerDemoProps {
+  date: Date | undefined;
+  setDate: (date: Date | undefined) => void;
+}
+ 
+export default function dateTimePicker({ date, setDate }: TimePickerDemoProps) {
+  const minuteRef = React.useRef<HTMLInputElement>(null);
+  const hourRef = React.useRef<HTMLInputElement>(null);
+  const secondRef = React.useRef<HTMLInputElement>(null);
+ 
+  return (
+    <div className="flex items-end gap-2">
+      <div className="grid gap-1 text-center">
+        <Label htmlFor="hours" className="text-xs">
+          Часы
+        </Label>
+        <TimePickerInput
+          picker="hours"
+          date={date}
+          setDate={setDate}
+          ref={hourRef}
+          onRightFocus={() => minuteRef.current?.focus()}
         />
+      </div>
+      <div className="grid gap-1 text-center">
+        <Label htmlFor="minutes" className="text-xs">
+          Минуты
+        </Label>
+        <TimePickerInput
+          picker="minutes"
+          date={date}
+          setDate={setDate}
+          ref={minuteRef}
+          onLeftFocus={() => hourRef.current?.focus()}
+          onRightFocus={() => secondRef.current?.focus()}
+        />
+      </div>
+      {/**
+       *    <div className="grid gap-1 text-center">
+        <Label htmlFor="seconds" className="text-xs">
+          Seconds
+        </Label>
+        <TimePickerInput
+          picker="seconds"
+          date={date}
+          setDate={setDate}
+          ref={secondRef}
+          onLeftFocus={() => minuteRef.current?.focus()}
+        />
+      </div>
+       */}
+   
+      <div className="flex h-10 items-center">
+        <HiOutlineClock className="ml-1 h-6 w-6"/>
+      </div>
+    </div>
+  );
 }

@@ -22,7 +22,8 @@ import { CalendarIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { DateTimePicker } from "@/components/dateTime/dateTimePicker"
+import DateTimePicker from "@/components/dateTime/dateTimePicker"
+import { toast } from "sonner"
 
 const formSchema = z.object({
     department: z.string(),
@@ -102,14 +103,33 @@ export
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-
+    toast("Event has been created", {
+      description: "Sunday, December 03, 2023 at 9:00 AM",
+      action: {
+        label: "Undo",
+        onClick: () => console.log("Undo"),
+      },
+    })
     console.log(values)
     form.reset()
   }
 
   return (
     <section className="w-2/4">
-          
+          <Button variant="outline"
+      onClick={() =>
+        toast.success("Случай успешно добавлен в ЖУС", {
+          description: format(new Date(), "PPP HH:mm", {locale: ru}),
+        })
+      }>cool</Button>
+
+      <Button variant="outline"
+      onClick={() =>
+        toast.error("Произошла ошибка при отправке в ЖУС", {
+          description: format(new Date(), "PPP HH:mm", {locale: ru}),
+        })
+      }>bad</Button>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
@@ -143,7 +163,6 @@ export
               :
               <div>
                 <div className="grid grid-cols-2 gap-2">
-               {/** <DateTimePicker form={form}/> */}
                 <FormField
                   control={form.control}
                   name="date"
@@ -161,7 +180,7 @@ export
                                 )}
                              >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                     {field.value ? format(field.value, "PPP", {locale: ru}) : <span>Выберите время*</span>}
+                     {field.value ? format(field.value, "PPP HH:mm", {locale: ru}) : <span>Выберите время*</span>}
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -172,6 +191,9 @@ export
                          initialFocus
                          locale={ru}
                         />
+                        <div className="p-2 flex justify-center border-t">
+                        <DateTimePicker date={field.value} setDate={field.onChange}/>
+                        </div>
                         </PopoverContent>
                 </Popover>
                   </FormControl>
