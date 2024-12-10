@@ -67,3 +67,21 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    @apply w-5 h-5;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    @apply rounded-full bg-slate-100 dark:bg-slate-700;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-300 dark:bg-slate-600;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-500;
+  }
+}

@@ -55,7 +55,7 @@ const formSchema = z.object({
 export
   default function FormRecord(
 ) {
-
+//post zapros and logic in post function
   const departments = [
     'Поликлиника',
     'Приемное',
@@ -103,12 +103,11 @@ export
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    toast("Event has been created", {
-      description: "Sunday, December 03, 2023 at 9:00 AM",
-      action: {
-        label: "Undo",
-        onClick: () => console.log("Undo"),
-      },
+    toast.success("Случай успешно добавлен в ЖУС", {
+      description: format(new Date(), "PPP HH:mm", {locale: ru}),
+    })
+    toast.error("Произошла ошибка при отправке в ЖУС", {
+      description: 'ᅠ ᅠ',
     })
     console.log(values)
     form.reset()
@@ -116,20 +115,6 @@ export
 
   return (
     <section className="w-2/4">
-          <Button variant="outline"
-      onClick={() =>
-        toast.success("Случай успешно добавлен в ЖУС", {
-          description: format(new Date(), "PPP HH:mm", {locale: ru}),
-        })
-      }>cool</Button>
-
-      <Button variant="outline"
-      onClick={() =>
-        toast.error("Произошла ошибка при отправке в ЖУС", {
-          description: format(new Date(), "PPP HH:mm", {locale: ru}),
-        })
-      }>bad</Button>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
@@ -158,11 +143,11 @@ export
           />
           {
             !form.getFieldState('department').isDirty
-              ?
-                ''
-              :
-              <div>
-                <div className="grid grid-cols-2 gap-2">
+            ?
+            ''
+            :
+            <div className="animate-appear">
+              <div className="grid grid-cols-2 gap-2">
                 <FormField
                   control={form.control}
                   name="date"
@@ -171,14 +156,14 @@ export
                 <FormLabel className="pb-0.5">Выберите время*</FormLabel>
                   <FormControl>
                     <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant={"outline"}
-                                className={cn(
-                                    "w-[320px] justify-start text-left font-normal",
-                                    !field.value && "text-muted-foreground"
-                                )}
-                             >
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-[320px] justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                      {field.value ? format(field.value, "PPP HH:mm", {locale: ru}) : <span>Выберите время*</span>}
                         </Button>

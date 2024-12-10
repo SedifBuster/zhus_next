@@ -24,8 +24,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={inter.className}>
-        <main className="flex min-h-screen flex-col ">
+      <body className={`${inter.className} overflow-y-scroll h-[100vh]`}>
+        <main className="flex min-h-screen flex-col">
           <Header/>
           {children}
         </main>
