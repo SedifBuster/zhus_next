@@ -17,6 +17,10 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+  //оптимизировать страницу таблицы придумать что то с кол-вом получаемых случаев
+  //графики? https://ui.shadcn.com/docs/components/chart
+  //прогресс бар при загрузке страницы https://ui.shadcn.com/docs/components/progress
+
 export default function RootLayout({
   children,
 }: Readonly<{
