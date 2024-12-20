@@ -24,6 +24,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import DateTimePicker from "@/components/dateTime/dateTimePicker"
 import { toast } from "sonner"
+import { UnitDep, UnitIssue } from "../page"
 
 const formSchema = z.object({
     department: z.string(),
@@ -54,37 +55,14 @@ const formSchema = z.object({
 
 export
   default function FormRecord(
+    {
+      problems,
+      departments
+    }: {
+      problems: UnitIssue[]
+      departments: UnitDep[]
+    }
 ) {
-//post zapros and logic in post function
-  const departments = [
-    'Поликлиника',
-    'Приемное',
-    'Пульмонология',
-    'Реабилитация',
-    'Реанимация',
-    'Лаборатория',
-    'Неврология',
-    'ОПП',
-    'ПАО',
-    'СЭО',
-    'Терапия',
-    'Хирургия',
-    'Рентгенология',
-    'Администрация',
-    'АХО',
-  ]
-
-  const problems = [
-    'Идентификация личности пациента',
-    'Падение',
-    'Пролежни',
-    'Событие, связаное с медицинским оборудованием или изделием',
-    'Событие, связанное с лекарственным средством',
-    'Инфекционное или паразитарное заболевание',
-    'ИСМП (инфекции, связанные с медецинской помощью)',
-    'Хирургические осложнения',//расхождение швов, повышенный демилий, еще что то
-    'Другое нежелательное событие',
-  ]
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -113,6 +91,8 @@ export
     form.reset()
   }
 
+  console.log(new Date("Fri Aug 19 2022 03:54:22 GMT+0300 (Москва, стандартное время)").toUTCString())
+
   return (
     <section className="w-2/4">
       <Form {...form}>
@@ -131,7 +111,7 @@ export
                     <SelectContent>
                       {
                         departments.map(dep => {
-                          return <SelectItem key={dep} value={dep}>{dep}</SelectItem>
+                          return <SelectItem key={dep.value} value={dep.value}>{dep.text}</SelectItem>
                         })
                       }
                     </SelectContent>
@@ -225,7 +205,7 @@ export
                     <SelectContent>
                       {
                         problems.map(problem => {
-                            return <SelectItem key={problem} value={problem}>{problem}</SelectItem>
+                            return <SelectItem key={problem.value} value={problem.value}>{problem.text}</SelectItem>
                         })
                       }
                     </SelectContent>

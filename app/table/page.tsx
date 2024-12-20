@@ -40,7 +40,7 @@ export default async function Table(
     }
   }
 
-  const result = await onFetchData('http://192.168.0.148:5100/log')
+  const result = await onFetchData('http://localhost:5025/api/logs/all')
 
   return <ZhusJournal onFetchedData={result}/>
 }
