@@ -15,92 +15,49 @@ export
   }
 }
 
-/*export
+export
   async function POST(
     request: Request
 ) {
   try {
     const body = await request.json()
-
     const {
+      department,
+      name,
       date,
+      place,
+      event,
+      circs,
+      gauge,
+      note,
+      liable,
+      cause,
+      comment
     } = body
-    console.log(body)
+    console.log("post log", body)
 
-    if ( !date ) {
+    if ( !date && !department && !name && !place && !event && !liable)
       return new NextResponse( 'Missing info', { status: 400 } )
-    }
 
-    const dash = await prisma.log.create({
+    const log = await prisma.log.create({
       data: {
-        date: date
+        department: department,//        department  Department
+        name: name,//        name        String
+        date: date,//        date        DateTime
+        place: place,//        place       String
+        event: event,//        event       Problem
+        circs: circs,//        circs       String
+        gauge: gauge,//        gauge       String?
+        note: note,//        note        String
+        liable: liable,//        liable      String
+        cause: cause,//        cause       String?
+        comment: comment,//        comment     String?
       }
     })
 
-    return NextResponse.json(dash.id)
+    return NextResponse.json(log.id)
   } catch ( error ) {
-    console.log( error, 'DASH_CREATE_ERROR' )
+    console.log( error, 'LOG_CREATE_ERROR' )
     return new NextResponse( 'Internal Error', { status: 500 } )
   }
 }
-
-export
-  async function DELETE(
-    request: Request
-) {
-  try {
-    const body = await request.json()
-
-    const {
-      id
-    } = body
-
-    const dash = await prisma.log.delete({
-      where: {
-        id: id
-      }
-    })
-
-    if ( !id || !dash ) {
-      return new NextResponse( 'Missing info', { status: 400 } )
-    }
-
-    return NextResponse.json(dash.id)
-  } catch ( error ) {
-    console.log( error, 'DASH_DELETE_ERROR' )
-    return new NextResponse( 'Internal Error', { status: 500 } )
-  }
-}
-
-export
-  async function PATCH(
-    request: Request
-) {
-  try {
-    const body = await request.json()
-
-    const {
-      id,
-      date,
-    } = body
-    console.log(body)
-
-    if ( !id || !date ) {
-      return new NextResponse('Missing info', { status: 400 })
-    }
-
-    const dash = await prisma.log.update({
-      where: {
-        id
-      },
-      data: {
-        date,
-      }
-    })
-
-    return NextResponse.json(dash.id)
-  } catch ( error ) {
-    console.log( error, 'DASH_UPDATE_ERROR' )
-    return new NextResponse( 'Internal Error', { status: 500 } )
-  }
-}*/

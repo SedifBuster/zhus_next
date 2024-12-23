@@ -1,5 +1,3 @@
-'use server'
-
 import { Department, Problem } from "@prisma/client";
 import FormRecord from "./components/formRecord";
 import QrTooltip from "./components/qrTooltip";
@@ -19,28 +17,6 @@ export
 export
   default async function Form(
 ) {
-
-  async function onPostData(url: string): Promise<any[]> {
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-
-      const data = await response.json()
-
-      return data;
-    } catch (error) {
-      console.error('Error fetching data:', error)
-      throw error;
-    }
-  }
-
-  //const result = await onPostData('/api/logs')
 
   const departments: UnitDep[] = [
     {
@@ -144,41 +120,31 @@ export
     },
   ]
 
+  async function onPostData(url: string, postData: BodyInit): Promise<number> {
+    "use server"
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: postData
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+      const data = await response.json()
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      throw Error;
+    }
+  }
+
   return <section className="flex flex-col justify-between p-2 container">
-    <FormRecord departments={departments} problems={problems}/>
+    <FormRecord departments={departments} problems={problems} postLog={onPostData}/>
     {/** qr and tooltip*/}
     <QrTooltip />
   </section>
 }
-
-/**
- *     const departments = [
-    'Поликлиника',
-    'Приемное',
-    'Пульмонология',
-    'Реабилитация',
-    'Реанимация',
-    'Лаборатория',
-    'Неврология',
-    'ОПП',
-    'ПАО',
-    'СЭО',
-    'Терапия',
-    'Хирургия',
-    'Рентгенология',
-    'Администрация',
-    'АХО',
-  ]
-
-  const problems = [
-    'Идентификация личности пациента',
-    'Падение',
-    'Пролежни',
-    'Событие, связаное с медицинским оборудованием или изделием',
-    'Событие, связанное с лекарственным средством',
-    'Инфекционное или паразитарное заболевание',
-    'ИСМП (инфекции, связанные с медецинской помощью)',
-    'Хирургические осложнения',//расхождение швов, повышенный демилий, еще что то
-    'Другое нежелательное событие',
-  ]
- */

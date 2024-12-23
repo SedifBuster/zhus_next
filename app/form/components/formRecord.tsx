@@ -57,10 +57,12 @@ export
   default function FormRecord(
     {
       problems,
-      departments
+      departments,
+      postLog,
     }: {
       problems: UnitIssue[]
       departments: UnitDep[]
+      postLog: (url: string, postData: any) => Promise<number>
     }
 ) {
 
@@ -80,18 +82,43 @@ export
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+
+   const result = fetch('http://localhost:5025/api/logs/all', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values)
+    });
+    console.log(result)
+
+    /*const result = await postLog('http://localhost:5025/api/logs/all', values)
+    .catch(error => {
+      toast.error("Произошла ошибка при отправке в ЖУС", {
+        description: <p className="text-black">{`${error}`}</p>
+      })
+    })
+    .then(() => {
+      toast.success(`Случай успешно добавлен в ЖУС`, {
+        description: format(new Date(), "PPP HH:mm", {locale: ru}),
+      })
+      form.reset()
+    })
+    console.log(result)*/
+    /*
+    if(typeof result === 'undefined') {
+      toast.error("Произошла ошибка при отправке в ЖУС", {
+        description: 'ᅠ ᅠ',
+      })
+    }
+
     toast.success("Случай успешно добавлен в ЖУС", {
       description: format(new Date(), "PPP HH:mm", {locale: ru}),
     })
-    toast.error("Произошла ошибка при отправке в ЖУС", {
-      description: 'ᅠ ᅠ',
-    })
-    console.log(values)
     form.reset()
+    */
   }
-
-  console.log(new Date("Fri Aug 19 2022 03:54:22 GMT+0300 (Москва, стандартное время)").toUTCString())
 
   return (
     <section className="w-2/4">
