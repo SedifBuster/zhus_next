@@ -59,10 +59,12 @@ export
       problems,
       departments,
       postLog,
+      postURL
     }: {
       problems: UnitIssue[]
       departments: UnitDep[]
       postLog: (url: string, postData: any) => Promise<number>
+      postURL: string
     }
 ) {
 
@@ -83,45 +85,22 @@ export
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-
-   const result = fetch('http://localhost:5025/api/logs/all', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values)
-    });
-    console.log(result)
-
-    /*const result = await postLog('http://localhost:5025/api/logs/all', values)
-    .catch(error => {
-      toast.error("Произошла ошибка при отправке в ЖУС", {
-        description: <p className="text-black">{`${error}`}</p>
+    await postLog(postURL, values)
+      .catch(error => {
+        toast.error("Произошла ошибка при отправке в ЖУС", {
+          description: <p className="text-black">{`${error}`}</p>
+        })
       })
-    })
-    .then(() => {
-      toast.success(`Случай успешно добавлен в ЖУС`, {
-        description: format(new Date(), "PPP HH:mm", {locale: ru}),
+      .then(() => {
+        toast.success(`Случай успешно добавлен в ЖУС`, {
+          description: format(new Date(), "PPP HH:mm", {locale: ru}),
+        })
+        form.reset()
       })
-      form.reset()
-    })
-    console.log(result)*/
-    /*
-    if(typeof result === 'undefined') {
-      toast.error("Произошла ошибка при отправке в ЖУС", {
-        description: 'ᅠ ᅠ',
-      })
-    }
-
-    toast.success("Случай успешно добавлен в ЖУС", {
-      description: format(new Date(), "PPP HH:mm", {locale: ru}),
-    })
-    form.reset()
-    */
   }
 
   return (
-    <section className="w-2/4">
+    <section className="w-2/4 max-lg:w-full">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
@@ -154,7 +133,7 @@ export
             ''
             :
             <div className="animate-appear">
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 max-lg:grid-cols-1">
                 <FormField
                   control={form.control}
                   name="date"
@@ -250,7 +229,7 @@ export
               <FormItem>
                 <FormLabel>Причина возникновения нежелательного события*</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Событие возникло..." className="w-[670px]" {...field} />
+                  <Textarea placeholder="Событие возникло..." className="w-[670px] max-lg:w-[100%]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -263,7 +242,7 @@ export
               <FormItem>
                 <FormLabel>Описание обстоятельств, при которых произошло нежелательное событие*</FormLabel>
                 <FormControl>
-                <Textarea placeholder="Событие произошло при..." className="w-[670px]" {...field} />
+                <Textarea placeholder="Событие произошло при..." className="w-[670px] max-lg:w-[100%]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -276,7 +255,7 @@ export
               <FormItem>
                 <FormLabel>Принятые меры по устранению последствий нежелательного события*</FormLabel>
                 <FormControl>
-                <Textarea placeholder="Были предприняты..." className="w-[670px]" {...field} />
+                <Textarea placeholder="Были предприняты..." className="w-[670px] max-lg:w-[100%]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -289,7 +268,7 @@ export
               <FormItem>
                 <FormLabel>Примечание</FormLabel>
                 <FormControl>
-                <Textarea placeholder="В событии..." className="w-[670px]" {...field} />
+                <Textarea placeholder="В событии..." className="w-[670px] max-lg:w-[100%]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

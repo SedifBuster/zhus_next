@@ -6,14 +6,13 @@ import {
   TableCaption,
   TableCell,
   TableFooter,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { IZhus } from "../page"
 import { DepartmentTable } from "./departmentTable"
 import { Dispatch, SetStateAction, useState } from "react"
 import clsx from "clsx"
+import ZhusTableHead from "./zhusTableHead"
 
 export
   function ZhusTable({
@@ -45,7 +44,6 @@ export
     for(let i = 0; i < depsNamesArr.length; i++) {
       arr.push(onFilterDataByDep(onFetchData, depsNamesArr[i])) 
     }
-
     return arr
   }
 
@@ -65,32 +63,17 @@ export
       onChangeTrigger(true)
       onChangeLogs(logs)
     }
-
   }
 
   return (
     <Table>
       <TableCaption>Лист нежелательных событий.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Отделения</TableHead>
-          <TableHead className="text-center">Падение</TableHead>
-          <TableHead className="text-center">Пролежни</TableHead>
-          <TableHead className="text-center">Идентификация личности пациента</TableHead>
-          <TableHead className="text-center">Событие, связанное с медицинским оборудованием или изделием</TableHead>
-          <TableHead className="text-center">Событие, связанное с лекарственным средством</TableHead>
-          <TableHead className="text-center">Инфекционное или паразитарное заболевание</TableHead>
-          <TableHead className="text-center">ИСМП (инфекции, связанные с медицинской помощью)</TableHead>
-          <TableHead>Другое</TableHead>
-          <TableHead className="text-right">Всего</TableHead>
-        </TableRow>
-      </TableHeader>
+      <ZhusTableHead />
       <TableBody>
         {
           finalArr
           ?
           finalArr.map((task: any) => {
-
             const [isOpen, setOpen] = useState<boolean>(false)
             const [isDepFilter, setDepFilter] = useState<IZhus[]>()
 
@@ -113,55 +96,117 @@ export
                   {task.department}
                 </TableCell>
 
-                <TableCell className={clsx("text-center hover:bg-green-600 hover:text-white cursor-pointer", isDepFilter && isDepFilter[0]? isDepFilter[0].event === 'Падение' && 'bg-green-600 text-white' : '')}
-                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Падение'), setDepFilter, isOpen, setOpen)}
+
+
+                <TableCell
+                  className={
+                    clsx("text-center hover:bg-green-600 hover:text-white cursor-pointer",
+                      isDepFilter && isDepFilter[0]? isDepFilter[0].event === 'Падение' && 'bg-green-600 text-white' : '')}
+                  onClick={() => 
+                    onClickCell(task.logs.filter((log: IZhus) => log.event === 'Падение' || log.event === 'Collapse'),
+                      setDepFilter, isOpen, setOpen)
+                  }
                 >
-                  {task.logs.filter((log: IZhus) => log.event === 'Падение').length}
+                  {task.logs.filter((log: IZhus) => log.event === 'Падение' || log.event === 'Collapse').length}
                 </TableCell>
 
-                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
-                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Пролежни'), setDepFilter, isOpen, setOpen)}
+
+
+                <TableCell
+                  className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() =>
+                    onClickCell(task.logs.filter((log: IZhus) => log.event === 'Пролежни' || log.event === 'PressureSores'),
+                      setDepFilter, isOpen, setOpen)}
                 >
-                  {task.logs.filter((log: IZhus) => log.event === 'Пролежни').length}
+                  {task.logs.filter((log: IZhus) => log.event === 'Пролежни' || log.event === 'PressureSores').length}
                 </TableCell>
 
-                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
-                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Идентификация личности пациента'), setDepFilter, isOpen, setOpen)}
-                >
-                  {task.logs.filter((log: IZhus) => log.event === 'Идентификация личности пациента').length}
-                </TableCell>
+
 
                 <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
-                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием'), setDepFilter, isOpen, setOpen)}
+                  onClick={() =>
+                    onClickCell(task.logs.filter(
+                      (log: IZhus) => log.event === 'Идентификация личности пациента'
+                                      || log.event === 'IdentificationOfThePatientsIdentity'),
+                      setDepFilter, isOpen, setOpen)}
                 >
-                  {task.logs.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием').length}
+                  {task.logs.filter(
+                    (log: IZhus) => log.event === 'Идентификация личности пациента'
+                                    || log.event === 'IdentificationOfThePatientsIdentity').length}
                 </TableCell>
+
+
+
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() =>
+                    onClickCell(task.logs.filter(
+                      (log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием'
+                                      || log.event === 'AnEventRelatedToAMedicalDeviceOrProduct'),
+                        setDepFilter, isOpen, setOpen)}
+                >
+                  {task.logs.filter(
+                    (log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием'
+                                    || log.event === 'AnEventRelatedToAMedicalDeviceOrProduct').length}
+                </TableCell>
+
+
 
                 <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
                   onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Событие, связанное с лекартсвенным средством'
-                    || log.event === 'Событие, связанное с лекарственным средством'), setDepFilter, isOpen, setOpen)}
+                    || log.event === 'Событие, связанное с лекарственным средством'
+                    || log.event === 'ADrugRelatedEvent'
+                  ), setDepFilter, isOpen, setOpen)}
                 >
                   {task.logs.filter((log: IZhus) => log.event === 'Событие, связанное с лекартсвенным средством'
-                                                                   || log.event === 'Событие, связанное с лекарственным средством').length}
+                                                    || log.event === 'Событие, связанное с лекарственным средством'
+                                                    || log.event === 'ADrugRelatedEvent').length}
                 </TableCell>
 
-                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
-                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание'), setDepFilter, isOpen, setOpen)}
-                >
-                  {task.logs.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание').length}
-                </TableCell>
+
 
                 <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
-                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)'), setDepFilter, isOpen, setOpen)}
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание'
+                                                                              || log.event === 'InfectiousOrParasiticDisease'
+                  ), setDepFilter, isOpen, setOpen)}
                 >
-                  {task.logs.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)').length}
+                  {task.logs.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание'
+                                                    || log.event === 'InfectiousOrParasiticDisease').length}
                 </TableCell>
 
+
+
                 <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
-                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Другое нежелательное событие'), setDepFilter, isOpen, setOpen)}
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)'
+                                                                              || log.event === 'ISMP'
+                  ), setDepFilter, isOpen, setOpen)}
                 >
-                  {task.logs.filter((log: IZhus) => log.event === 'Другое нежелательное событие').length}
+                  {task.logs.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)'
+                                                    || log.event === 'ISMP').length}
                 </TableCell>
+
+
+
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Хирургические осложнения'
+                                                                              || log.event === 'SurgicalComplications'
+                  ), setDepFilter, isOpen, setOpen)}
+                >
+                  {task.logs.filter((log: IZhus) => log.event === 'Хирургические осложнения'
+                                                    || log.event === 'SurgicalComplications').length}
+                </TableCell>
+
+
+
+                <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
+                  onClick={() => onClickCell(task.logs.filter((log: IZhus) => log.event === 'Другое нежелательное событие'
+                                                                              || log.event === 'AnotherUndesirableEvent'
+                  ), setDepFilter, isOpen, setOpen)}
+                >
+                  {task.logs.filter((log: IZhus) => log.event === 'Другое нежелательное событие'
+                                                    || log.event === 'AnotherUndesirableEvent').length}
+                </TableCell>
+
+
 
                 <TableCell className="text-center hover:bg-green-600 hover:text-white cursor-pointer"
                   onClick={() => onClickCell(task.logs, setDepFilter, isOpen, setOpen)}
@@ -173,6 +218,7 @@ export
 
               {
                 isOpen
+                
                 ?
                 <DepartmentTable logs={isDepFilter}/>
                 :
@@ -189,36 +235,49 @@ export
         <TableRow>
           <TableCell>Итого</TableCell>
           <TableCell className="text-center">
-            {onFetchData.filter((log: IZhus) => log.event === 'Падение').length}
+            {onFetchData.filter((log: IZhus) => log.event === 'Падение'
+                                                || log.event === 'Collapse').length}
           </TableCell>
 
           <TableCell className="text-center">
-            {onFetchData.filter((log: IZhus) => log.event === 'Пролежни').length}
+            {onFetchData.filter((log: IZhus) => log.event === 'Пролежни'
+                                                || log.event === 'PressureSores').length}
           </TableCell>
 
           <TableCell className="text-center">
-            {onFetchData.filter((log: IZhus) => log.event === 'Идентификация личности пациента').length}
+            {onFetchData.filter((log: IZhus) => log.event === 'Идентификация личности пациента'
+                                                || log.event === 'IdentificationOfThePatientsIdentity').length}
           </TableCell>
 
           <TableCell className="text-center">
-            {onFetchData.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием').length}
+            {onFetchData.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием'
+                                                || log.event === 'AnEventRelatedToAMedicalDeviceOrProduct').length}
           </TableCell>
 
           <TableCell className="text-center">
             {onFetchData.filter((log: IZhus) => log.event === 'Событие, связанное с лекартсвенным средством'
-                                                              || log.event === 'Событие, связанное с лекарственным средством').length}
+                                                              || log.event === 'Событие, связанное с лекарственным средством'
+                                                              || log.event === 'ADrugRelatedEvent').length}
           </TableCell>
 
           <TableCell className="text-center">
-            {onFetchData.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание').length}
+            {onFetchData.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание'
+                                                || log.event === 'InfectiousOrParasiticDisease').length}
           </TableCell>
 
           <TableCell className="text-center">
-            {onFetchData.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)').length}
+            {onFetchData.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)'
+                                                || log.event === 'ISMP').length}
           </TableCell>
 
           <TableCell className="text-center">
-            {onFetchData.filter((log: IZhus) => log.event === 'Другое нежелательное событие').length}
+            {onFetchData.filter((log: IZhus) => log.event === 'Хирургические осложнения'
+                                                || log.event === 'SurgicalComplications').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'Другое нежелательное событие'
+                                                || log.event === 'AnotherUndesirableEvent').length}
           </TableCell>
 
           <TableCell className="text-center">

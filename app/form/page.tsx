@@ -128,7 +128,7 @@ export
         headers: {
           'Content-Type': 'application/json',
         },
-        body: postData
+        body: JSON.stringify(postData)
       });
 
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
@@ -142,8 +142,10 @@ export
     }
   }
 
+  const postURL = "http://localhost:5025/api/logs/all"
+
   return <section className="flex flex-col justify-between p-2 container">
-    <FormRecord departments={departments} problems={problems} postLog={onPostData}/>
+    <FormRecord departments={departments} problems={problems} postLog={onPostData} postURL={postURL}/>
     {/** qr and tooltip*/}
     <QrTooltip />
   </section>
