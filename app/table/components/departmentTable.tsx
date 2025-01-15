@@ -29,7 +29,7 @@ export
     logs
     ?
     logs.map((log) => {
-      return     <TableRow className="bg-green-50">
+      return <TableRow className="bg-green-50" key={log.id}>
       <TableCell className="font-medium">{log.date.toString()}</TableCell>
       <TableCell>{log.name} и дата рождения</TableCell>
       <TableCell>{log.place}</TableCell>

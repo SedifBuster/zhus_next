@@ -14,72 +14,74 @@ export
   text: String,
 }
 
+export const departments: UnitDep[] = [
+  {
+    value: "Policlinic",
+    text: "Поликлиника",
+  },
+  {
+    value: "Reception",
+    text: "Приемное",
+  },
+  {
+    value: "Pulmonology",
+    text: "Пульмонология",
+  },
+  {
+    value: "Rehabilitation",
+    text: "Реабилитация",
+  },
+  {
+    value: "Reanimation",
+    text: "Реанимация",
+  },
+  {
+    value: "Laboratory",
+    text: "Лаборатория",
+  },
+  {
+    value: "Neurology",
+    text: "Неврология",
+  },
+  {
+    value: "Opp",
+    text: "ОПП",
+  },
+  {
+    value: "Pao",
+    text: "ПАО",
+  },
+  {
+    value: "Ceo",
+    text: "СЭО",
+  },
+  {
+    value: "Therapeutic",
+    text: "Терапия",
+  },
+  {
+    value: "Surgical",
+    text: "Хирургия",
+  },
+  {
+    value: "Xray",
+    text: "Рентгенология",
+  },
+  {
+    value: "Administration",
+    text: "Администрация",
+  },
+  {
+    value: "Aho",
+    text: "АХО",
+  },
+]
+  
 export
-  default async function Form(
+  default function Form(
 ) {
 
-  const departments: UnitDep[] = [
-    {
-      value: "Policlinic",
-      text: "Поликлиника",
-    },
-    {
-      value: "Reception",
-      text: "Приемное",
-    },
-    {
-      value: "Pulmonology",
-      text: "Пульмонология",
-    },
-    {
-      value: "Rehabilitation",
-      text: "Реабилитация",
-    },
-    {
-      value: "Reanimation",
-      text: "Реанимация",
-    },
-    {
-      value: "Laboratory",
-      text: "Лаборатория",
-    },
-    {
-      value: "Neurology",
-      text: "Неврология",
-    },
-    {
-      value: "Opp",
-      text: "ОПП",
-    },
-    {
-      value: "Pao",
-      text: "ПАО",
-    },
-    {
-      value: "Ceo",
-      text: "СЭО",
-    },
-    {
-      value: "Therapeutic",
-      text: "Терапия",
-    },
-    {
-      value: "Surgical",
-      text: "Хирургия",
-    },
-    {
-      value: "Xray",
-      text: "Рентгенология",
-    },
-    {
-      value: "Administration",
-      text: "Администрация",
-    },
-    {
-      value: "Aho",
-      text: "АХО",
-    },
-  ]
+
 
   const problems: UnitIssue[] = [
     {
@@ -120,6 +122,8 @@ export
     },
   ]
 
+  const postURL = "http://localhost:5025/api/logs/all"
+
   async function onPostData(url: string, postData: BodyInit): Promise<number> {
     "use server"
     try {
@@ -141,8 +145,6 @@ export
       throw Error;
     }
   }
-
-  const postURL = "http://localhost:5025/api/logs/all"
 
   return <section className="flex flex-col justify-between p-2 container">
     <FormRecord departments={departments} problems={problems} postLog={onPostData} postURL={postURL}/>

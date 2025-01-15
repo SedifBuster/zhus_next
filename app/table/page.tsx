@@ -1,4 +1,4 @@
-'use server'
+
 
 import { ZhusJournal } from "./components/zhusJournal";
 
@@ -17,10 +17,13 @@ export interface IZhus {
   comment: null | string
 }
 
-export default async function Table(
+export
+default function Table(
 ) {
+  const getUrl = 'http://localhost:5025/api/logs/all'
 
   async function onFetchData(url: string): Promise<IZhus[]> {
+    'use server'
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -40,11 +43,9 @@ export default async function Table(
     }
   }
 
-  const result = await onFetchData('http://localhost:5025/api/logs/all')
-
-  return <ZhusJournal onFetchedData={result}/>
+  return <ZhusJournal onFetchData={onFetchData} getUrl={getUrl}/>
 }
-
+ //const result = await onFetchData('http://localhost:5025/api/logs/all')
 /*
  async function fetchData(url: string): Promise<any> {
     try {

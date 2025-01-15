@@ -21,6 +21,7 @@ export
     onFetchData: IZhus[]
   }
 ) {
+  {/**поменять тут  то что бы без мусора*/}
   const namesSet = new Set()
   let depsNamesArr: string[] | unknown[] = []
 
@@ -65,7 +66,46 @@ export
     }
   }
 
-  {/**поменять тут  то что бы без мусора*/}
+  //bad, maybe exists a better solution
+  const onSetupDepName = (dep: string) => {
+    switch (dep) {
+      case 'Surgical':
+        return 'Хирургия'
+      case 'Pulmonology':
+        return 'Пульмонология'
+      case 'Policlinic':
+        return 'Поликлиника'
+      case 'Therapeutic':
+        return 'Терапия'
+      case 'Reception':
+        return 'Приемное'
+      case 'Neurology':
+        return 'Неврология'
+      case 'Rehabilitation':
+        return 'Реабилитация'
+      case 'Laboratory':
+        return 'Лаборатория'
+      case 'Xray':
+        return 'Рентгенология'
+      case 'Reanimation':
+        return 'Реанимация'
+      case 'Administration':
+        return 'Администрация'
+      case 'Opp':
+        return 'ОПП'
+      case 'Pao':
+        return 'ПАО'
+      case 'Ceo':
+        return 'СЭО'
+      case 'Aho':
+        return 'АХО' 
+      default:
+        return dep
+    }
+  }
+
+  //todo
+  //переместить строку таблицы в компоненту и оттуда танцевать
 
   return (
     <Table>
@@ -91,11 +131,10 @@ export
 
             if(task.department !== 'ОПМП' && task.department !== 'Reabilitation')
 
-            return <>
-              <TableRow key={task.department}>
+            return<> <TableRow  key={task.department}>
 
                 <TableCell className="font-medium">
-                  {task.department}
+                  {onSetupDepName(task.department)}
                 </TableCell>
 
 
@@ -217,16 +256,16 @@ export
                 </TableCell>
 
               </TableRow>
-
+            </>
               {
-                isOpen
+                !isOpen
                 
                 ?
                 <DepartmentTable logs={isDepFilter}/>
                 :
                 null
               }
-              </>
+            
               }
             )
             :
