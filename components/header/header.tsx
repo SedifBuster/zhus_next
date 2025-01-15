@@ -36,7 +36,7 @@ export
       </div>
       {/*login in portal*/}
       <div className="flex flex-col">
-        <Button variant={'default'}>войти в аккаунт</Button>
+        {/*<Button variant={'default'}>войти в аккаунт</Button>*/}
       </div>
       </div>
     </div>

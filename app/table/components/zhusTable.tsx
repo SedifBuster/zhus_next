@@ -65,6 +65,8 @@ export
     }
   }
 
+  {/**поменять тут  то что бы без мусора*/}
+
   return (
     <Table>
       <TableCaption>Лист нежелательных событий.</TableCaption>
