@@ -9,6 +9,139 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { IZhus } from "../page"
+import ZhusTableHead from "./zhusTableHead"
+import ZhusTableRow from "./zhusTableRow"
+
+export
+  function ZhusTable({
+    onFetchData
+  }: {
+    onFetchData: IZhus[]
+  }
+) {
+  {/**поменять тут  то что бы без мусора*/}
+  //names from deparments
+  let depsNamesArr: string[] = []
+  ///filter by department name
+  const onFilterDataByDep = (data: IZhus[], dep: string) => { return {department: dep, logs: [...data.filter(log => log.department === dep)]}}
+  //...
+  const onSetDepsNames = (data: IZhus[]) => {
+    const namesSet = new Set<string>()
+    for(let i = 0; i < data.length; i++) {
+      namesSet.add(data[i].department)
+    }
+   return depsNamesArr = Array.from(namesSet)
+  }
+  //
+  onSetDepsNames(onFetchData)
+  //so final array...
+  const onSetDeps = () => {
+    let arr = []
+    for(let i = 0; i < depsNamesArr.length; i++) {
+      arr.push(onFilterDataByDep(onFetchData, depsNamesArr[i])) 
+    }
+    return arr
+  }
+  let finalArr = onSetDeps()
+
+  //todo
+  //переместить строку таблицы в компоненту и оттуда танцевать
+  return (
+    <Table>
+      <TableCaption>Лист нежелательных событий.</TableCaption>
+      <ZhusTableHead />
+      <TableBody>
+        {
+          finalArr
+          ?
+          finalArr.map((task: {department: string; logs: IZhus[] }, index) => {
+            return <ZhusTableRow key={task.department} rowData={task}/>                                              //<> </>
+              }
+            )
+            :
+            'Случаев не найдено'
+        }
+      </TableBody>
+    {
+      finalArr
+      //in the end
+      ?
+      <TableFooter>
+        <TableRow>
+          <TableCell>Итого</TableCell>
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'Падение'
+                                                || log.event === 'Collapse').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'Пролежни'
+                                                || log.event === 'PressureSores').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'Идентификация личности пациента'
+                                                || log.event === 'IdentificationOfThePatientsIdentity').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'Событие, связаное с медицинским оборудованием или изделием'
+                                                || log.event === 'AnEventRelatedToAMedicalDeviceOrProduct').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'Событие, связанное с лекартсвенным средством'
+                                                              || log.event === 'Событие, связанное с лекарственным средством'
+                                                              || log.event === 'ADrugRelatedEvent').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'Инфекционное или паразитарное заболевание'
+                                                || log.event === 'InfectiousOrParasiticDisease').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'ИСМП (инфекции, связанные с медицинской помощью)'
+                                                || log.event === 'ISMP').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'Хирургические осложнения'
+                                                || log.event === 'SurgicalComplications').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.filter((log: IZhus) => log.event === 'Другое нежелательное событие'
+                                                || log.event === 'AnotherUndesirableEvent').length}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {onFetchData.length}
+          </TableCell>
+
+        </TableRow>
+      </TableFooter>
+      :
+      null
+    }
+    </Table>
+    )
+}
+
+
+  //old
+  /**
+   'use client'
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableRow,
+} from "@/components/ui/table"
+import { IZhus } from "../page"
 import { DepartmentTable } from "./departmentTable"
 import { Dispatch, SetStateAction, useState } from "react"
 import clsx from "clsx"
@@ -21,7 +154,7 @@ export
     onFetchData: IZhus[]
   }
 ) {
-  {/**поменять тут  то что бы без мусора*/}
+  {/**поменять тут  то что бы без мусора}
   const namesSet = new Set()
   let depsNamesArr: string[] | unknown[] = []
 
@@ -51,8 +184,10 @@ export
   let finalArr = onSetDeps()
 
   const onClickCell = (
-    logs: IZhus[], onChangeLogs: Dispatch<SetStateAction<IZhus[] | undefined>>,
-    trigger: boolean, onChangeTrigger: Dispatch<SetStateAction<boolean>>
+    trigger: boolean,
+    logs: IZhus[],
+    onChangeTrigger: Dispatch<SetStateAction<boolean>>,
+    onChangeLogs: Dispatch<SetStateAction<IZhus[] | undefined>>
     ) => {
 
     if(trigger) {
@@ -106,7 +241,6 @@ export
 
   //todo
   //переместить строку таблицы в компоненту и оттуда танцевать
-
   return (
     <Table>
       <TableCaption>Лист нежелательных событий.</TableCaption>
@@ -329,3 +463,4 @@ export
     </Table>
     )
   }
+   */
