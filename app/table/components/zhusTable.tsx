@@ -11,6 +11,7 @@ import {
 import { IZhus } from "../page"
 import ZhusTableHead from "./zhusTableHead"
 import ZhusTableRow from "./zhusTableRow"
+import { TableTest } from "./tableTest"
 
 export
   function ZhusTable({
@@ -19,7 +20,6 @@ export
     onFetchData: IZhus[]
   }
 ) {
-  {/**поменять тут  то что бы без мусора*/}
   //names from deparments
   let depsNamesArr: string[] = []
   ///filter by department name
@@ -44,10 +44,17 @@ export
   }
   let finalArr = onSetDeps()
 
-  //todo
-  //переместить строку таблицы в компоненту и оттуда танцевать
   return (
-    <Table>
+      <TableTest finalArr={finalArr}/>
+    )
+}
+
+
+
+
+//old2
+/**
+ <Table>
       <TableCaption>Лист нежелательных событий.</TableCaption>
       <ZhusTableHead />
       <TableBody>
@@ -125,9 +132,8 @@ export
       null
     }
     </Table>
-    )
-}
 
+ */
 
   //old
   /**

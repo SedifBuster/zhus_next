@@ -246,7 +246,7 @@ export
                 
                 ?
 
-                <DepartmentTable logs={isDepFilter}/>
+                ''//<DepartmentTable logs={isDepFilter}/>
                 :
                 null
               }

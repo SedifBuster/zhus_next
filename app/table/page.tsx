@@ -17,6 +17,11 @@ export interface IZhus {
   comment: null | string
 }
 
+export interface IFArray {
+  department: string,
+  logs: IZhus[]
+}
+
 export
 default function Table(
 ) {
