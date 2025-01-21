@@ -193,7 +193,7 @@ export function TableTest(
                 onClick: table.getToggleAllRowsExpandedHandler(),
               }}
             >
-              {table.getIsAllRowsExpanded() ? '👇' : '👉'}
+              {/*table.getIsAllRowsExpanded() ? '👇' : '👉'*/}
             </button>{' '}
             Отделение
           </>
@@ -204,8 +204,8 @@ export function TableTest(
               paddingLeft: `${row.depth * 2}rem`,
             }}
           >
-            <div>
-              {row.getCanExpand() ? (
+            <div className="text-start font-medium ">
+              {/*row.getCanExpand() ? (
                 <button
                   {...{
                     onClick: row.getToggleExpandedHandler(),
@@ -217,7 +217,7 @@ export function TableTest(
                 </button>
               ) : (
                 '🔵'
-              )}{' '}
+              )*/}{' '}
               {onSetupDepNameToRu(row.getValue('department'))}
             </div>
           </div>
@@ -232,54 +232,85 @@ export function TableTest(
       //  footer: props => props.column.id,
       //},
       {
-        accessorKey: 'pressureSores',
-        header: () => 'Пролежни',
+        accessorKey: 'collapse',
+        header: () => 'Падение',
         cell: ({row}) => (
-            <>{row.getValue('pressureSores').length}</>
+            <>{row.getValue<string>('collapse').length}</>
         ),
         footer: props => props.column.id,
       },
-      /*
+      {
+        accessorKey: 'pressureSores',
+        header: () => 'Пролежни',
+        cell: ({row}) => (
+            <>{row.getValue<string>('pressureSores').length}</>
+        ),
+        footer: props => props.column.id,
+      },
       {
         accessorKey: 'identificationOfThePatientsIdentity',
         header: () => 'Идентификация личности пациента',
+        cell: ({row}) => (
+          <>{row.getValue<string>('identificationOfThePatientsIdentity').length}</>
+        ),
         footer: props => props.column.id,
       },
       {
         accessorKey: 'anEventRelatedToAMedicalDeviceOrProduct',
-        header: 'Событие, связанное с медицинским оборудованием или изделием',
+        header: () => 'Событие, связанное с медицинским оборудованием или изделием',
+        cell: ({row}) => (
+          <>{row.getValue<string>('anEventRelatedToAMedicalDeviceOrProduct').length}</>
+        ),
         footer: props => props.column.id,
       },
       {
         accessorKey: 'aDrugRelatedEvent',
-        header: 'Событие, связанное с лекарственным средством',
+        header: () => 'Событие, связанное с лекарственным средством',
+        cell: ({row}) => (
+          <>{row.getValue<string>('aDrugRelatedEvent').length}</>
+        ),
         footer: props => props.column.id,
       },
       {
         accessorKey: 'infectiousOrParasiticDisease',
-        header: 'Инфекционное или паразитарное заболевание',
+        header: () => 'Инфекционное или паразитарное заболевание',
+        cell: ({row}) => (
+          <>{row.getValue<string>('infectiousOrParasiticDisease').length}</>
+        ),
         footer: props => props.column.id,
       },
       {
         accessorKey: 'iSMP',
-        header: 'ИСМП (инфекции, связанные с медицинской помощью)',
+        header: () => 'ИСМП (инфекции, связанные с медицинской помощью)',
+        cell: ({row}) => (
+          <>{row.getValue<string>('iSMP').length}</>
+        ),
         footer: props => props.column.id,
       },
       {
         accessorKey: 'surgicalComplications',
-        header: 'Хирургические осложнения',
+        header: () => 'Хирургические осложнения',
+        cell: ({row}) => (
+          <>{row.getValue<string>('surgicalComplications').length}</>
+        ),
         footer: props => props.column.id,
       },
       {
         accessorKey: 'anotherUndesirableEvent',
-        header: 'Другое',
+        header: () => 'Другое',
+        cell: ({row}) => (
+          <>{row.getValue<string>('anotherUndesirableEvent').length}</>
+        ),
         footer: props => props.column.id,
       },
       {
         accessorKey: 'logs',
-        header: 'Всего',
+        header: () => 'Всего',
+        cell: ({row}) => (
+          <>{row.getValue<string>('logs').length}</>
+        ),
         footer: props => props.column.id,
-      },*/
+      },
     ],
     []
   )
@@ -292,7 +323,7 @@ export function TableTest(
       expanded,
     },
     onExpandedChange: setExpanded,
-    getSubRows: row => row.logs,
+    //getSubRows: row => row.logs,
     getExpandedRowModel: getExpandedRowModel(),
     // filterFromLeafRows: true,
     // maxLeafRowFilterDepth: 0,
@@ -300,7 +331,6 @@ export function TableTest(
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -314,26 +344,15 @@ export function TableTest(
   })
 
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-  
-      </div>
-      <div className="rounded-md border">
+    <div className="w-full ">
+      <div className="rounded-md border mt-6">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-center">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -354,7 +373,7 @@ export function TableTest(
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-center">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -369,7 +388,7 @@ export function TableTest(
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Нет результатов
                 </TableCell>
               </TableRow>
             )}
@@ -377,30 +396,17 @@ export function TableTest(
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+        {/** 
+         *  <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+         * 
+        */}
+       
       </div>
-      
+     {
+     /* 
     <div className="p-2">
       <div className="h-2" />
       <table>
@@ -524,33 +530,11 @@ export function TableTest(
       <label>Row Selection State:</label>
       <pre>{JSON.stringify(table.getState().rowSelection, null, 2)}</pre>
     </div>
+    */
+    }
     </div>
   )
 }
-
-
-function IndeterminateCheckbox({
-    indeterminate,
-    className = '',
-    ...rest
-  }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
-    const ref = useRef<HTMLInputElement>(null!)
-  
-    useEffect(() => {
-      if (typeof indeterminate === 'boolean') {
-        ref.current.indeterminate = !rest.checked && indeterminate
-      }
-    }, [ref, indeterminate])
-  
-    return (
-      <input
-        type="checkbox"
-        ref={ref}
-        className={className + ' cursor-pointer'}
-        {...rest}
-      />
-    )
-  }
 
   function Filter({
     column,
