@@ -8,17 +8,12 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   Column,
   ExpandedState,
   getExpandedRowModel,
 } from "@tanstack/react-table"
-
-import { Button } from "@/components/ui/button"
-
-import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
@@ -29,6 +24,31 @@ import {
 } from "@/components/ui/table"
 import { HTMLProps, useEffect, useMemo, useReducer, useRef, useState } from "react"
 import { IFArray, IZhus } from "../page"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+import { DepartmentTable } from "./departmentTable"
 
 const data: Payment[] = [
   {
@@ -234,8 +254,22 @@ export function TableTest(
       {
         accessorKey: 'collapse',
         header: () => 'Падение',
-        cell: ({row}) => (
-            <>{row.getValue<string>('collapse').length}</>
+        cell: ({row}) => (<DropdownMenu >
+          <DropdownMenuTrigger>
+             <div className="select-none">{row.getValue<string>('collapse').length}</div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[100vw]" side="bottom" avoidCollisions={true} align="center">
+            <DropdownMenuLabel>{onSetupDepNameToRu(row.getValue('department'))}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <DepartmentTable logs={row.getValue('collapse')}/>
+            </DropdownMenuItem>
+            <DropdownMenuItem>Billing</DropdownMenuItem>
+            <DropdownMenuItem>Team</DropdownMenuItem>
+            <DropdownMenuItem>Subscription</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+           
         ),
         footer: props => props.column.id,
       },
@@ -243,7 +277,16 @@ export function TableTest(
         accessorKey: 'pressureSores',
         header: () => 'Пролежни',
         cell: ({row}) => (
-            <>{row.getValue<string>('pressureSores').length}</>
+          <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger> <div>{row.getValue<string>('pressureSores').length}</div></AccordionTrigger>
+            <AccordionContent>
+              Yes. It adheres to the WAI-ARIA design pattern.
+              <DepartmentTable logs={row.getValue('pressureSores')}/>
+            </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+           
         ),
         footer: props => props.column.id,
       },
@@ -251,7 +294,23 @@ export function TableTest(
         accessorKey: 'identificationOfThePatientsIdentity',
         header: () => 'Идентификация личности пациента',
         cell: ({row}) => (
-          <>{row.getValue<string>('identificationOfThePatientsIdentity').length}</>
+          <Drawer>
+  <DrawerTrigger><div>{row.getValue<string>('identificationOfThePatientsIdentity').length}</div></DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+      <DrawerDescription>This action cannot be undone.</DrawerDescription>
+    </DrawerHeader>
+    <DepartmentTable logs={row.getValue('identificationOfThePatientsIdentity')}/>
+    <DrawerFooter>
+     
+      <DrawerClose>
+      close
+      </DrawerClose>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+          
         ),
         footer: props => props.column.id,
       },
