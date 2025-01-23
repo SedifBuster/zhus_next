@@ -17,6 +17,7 @@ export
 
   return <Table className="w-full">
     <TableHeader  className="bg-green-100 w-full">
+      <TableRow>
       <TableHead className="font-medium">дата</TableHead>
       <TableHead>имя пациента и дата рождения</TableHead>
       <TableHead>место нежелательного события</TableHead>
@@ -25,6 +26,7 @@ export
       <TableHead>принятые меры</TableHead>
       <TableHead>примечание</TableHead>
       <TableHead>ответственный</TableHead>
+      </TableRow>
     </TableHeader>
     <TableBody> 
   {

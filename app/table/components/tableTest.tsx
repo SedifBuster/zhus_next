@@ -13,6 +13,7 @@ import {
   Column,
   ExpandedState,
   getExpandedRowModel,
+  Row,
 } from "@tanstack/react-table"
 import {
   Table,
@@ -22,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { HTMLProps, useEffect, useMemo, useReducer, useRef, useState } from "react"
+import { Fragment, HTMLProps, useEffect, useMemo, useReducer, useRef, useState } from "react"
 import { IFArray, IZhus } from "../page"
 import {
   DropdownMenu,
@@ -238,10 +239,20 @@ export function TableTest(
               ) : (
                 '🔵'
               )*/}{' '}
-              {onSetupDepNameToRu(row.getValue('department'))}
+                          <button
+              {...{
+                onClick: row.getToggleExpandedHandler(),
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? onSetupDepNameToRu(row.getValue('department')) : ''
+            }
+            {row.groupingColumnId}
+            </button>
             </div>
           </div>
         ),
+        //getGroupingValue: row => `AS`,
         footer: props => props.column.id,
       },
       //{
@@ -394,12 +405,7 @@ export function TableTest(
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    //state: {
-    //  sorting,
-    //  columnFilters,
-    //  columnVisibility,
-    //  rowSelection,
-   // },
+    getRowCanExpand: () => true,
   })
 
   return (
@@ -427,6 +433,7 @@ export function TableTest(
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
+                <Fragment key={row.id}>
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
@@ -440,6 +447,16 @@ export function TableTest(
                     </TableCell>
                   ))}
                 </TableRow>
+                {row.getIsExpanded() && (
+                  <tr>
+                    {/* 2nd row is a custom 1 cell row */}
+                    <td colSpan={row.getVisibleCells().length}>
+                      {renderSubComponent({ row, arrName: '' })}
+
+                    </td>
+                  </tr>
+                )}
+                </Fragment>
               ))
             ) : (
               <TableRow>
@@ -645,3 +662,14 @@ export function TableTest(
       />
     )
   }
+
+  const renderSubComponent = ({ row, arrName }: { row: Row<IFinal>; arrName?: string }) => {
+    return (
+      <div style={{ fontSize: '10px' }}>
+        <code>{JSON.stringify(row, null, 2)}</code>
+        
+      </div>
+    )
+  }
+//<code>{JSON.stringify(row.original, null, 2)}</code>
+//<DepartmentTable logs={row.getValue(arrName)} />
