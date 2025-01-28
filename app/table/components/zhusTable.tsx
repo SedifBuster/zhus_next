@@ -12,6 +12,7 @@ import { IZhus } from "../page"
 import ZhusTableHead from "./zhusTableHead"
 import ZhusTableRow from "./zhusTableRow"
 import { TableTest } from "./tableTest"
+import { useEffect, useState } from "react"
 
 export
   function ZhusTable({
@@ -20,6 +21,7 @@ export
     onFetchData: IZhus[]
   }
 ) {
+
   //names from deparments
   let depsNamesArr: string[] = []
   ///filter by department name
@@ -48,9 +50,6 @@ export
       <TableTest finalArr={finalArr}/>
     )
 }
-
-
-
 
 //old2
 /**

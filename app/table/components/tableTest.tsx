@@ -10,7 +10,6 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
-  Column,
   ExpandedState,
   getExpandedRowModel,
   Row,
@@ -23,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Fragment, HTMLProps, useEffect, useMemo, useReducer, useRef, useState } from "react"
+import { Fragment, useEffect, useMemo, useState } from "react"
 import { IFArray, IZhus } from "../page"
 import {
   DropdownMenu,
@@ -51,61 +50,6 @@ import {
 } from "@/components/ui/drawer"
 import { DepartmentTable } from "./departmentTable"
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-    subRows: []
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-    subRows: []
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-    subRows: []
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-    subRows: []
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-    subRows: []
-  },
-]
-
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string,
-  subRows: []
-}
-
-export type Person = {
-    firstName: string
-    lastName: string
-    age: number
-    visits: number
-    progress: number
-    status: 'relationship' | 'complicated' | 'single'
-    subRows?: Person[]
-  }
 
 interface IFinal {
   department: string,
@@ -152,20 +96,10 @@ export function TableTest(
       setFinal(onFitFinalArrToTable(finalArr))
   },[finalArr])
 
-  console.log(isFinal)
-
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
-
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
-  const rerender = useReducer(() => ({}), {})[1]
+  //console.log(isFinal)
 
     //bad, maybe exists a better solution
-    const onSetupDepNameToRu = (depName: string) => {
+  const onSetupDepNameToRu = (depName: string) => {
         switch (depName) {
           case 'Surgical':
             return 'Хирургия'
@@ -200,7 +134,7 @@ export function TableTest(
           default:
             return depName
         }
-      }
+  }
 
 
   const columns = useMemo<ColumnDef<IFinal>[]>(
@@ -209,13 +143,6 @@ export function TableTest(
         accessorKey: 'department',
         header: ({ table }) => (
           <>
-            <button
-              {...{
-                onClick: table.getToggleAllRowsExpandedHandler(),
-              }}
-            >
-              {/*table.getIsAllRowsExpanded() ? '👇' : '👉'*/}
-            </button>{' '}
             Отделение
           </>
         ),
@@ -226,33 +153,26 @@ export function TableTest(
             }}
           >
             <div className="text-start font-medium ">
-              {/*row.getCanExpand() ? (
-                <button
-                  {...{
-                    onClick: row.getToggleExpandedHandler(),
-                    style: { cursor: 'pointer' },
-                  }}
-                  className="pl-2"
-                >
-                  {row.getIsExpanded() ? '👇' : '👉'}
-                </button>
-              ) : (
-                '🔵'
-              )*/}{' '}
-                          <button
+            <button
+              onClick={row.getToggleExpandedHandler()}
               {...{
-                onClick: row.getToggleExpandedHandler(),
+                //onClick: row.getToggleExpandedHandler(),
                 style: { cursor: 'pointer' },
               }}
             >
-              {row.getCanExpand()? onSetupDepNameToRu(row.getValue('department')) : ''
-            }
+              {row.getCanExpand()? 
+                <>
+                {onSetupDepNameToRu(row.getValue('department'))}
+                {/*console.log(row._getAllCellsByColumnId())*/}
+                </>
+                : 
+                ''
+              }
             {row.groupingColumnId}
             </button>
             </div>
           </div>
         ),
-        //getGroupingValue: row => `AS`,
         footer: props => props.column.id,
       },
       //{
@@ -265,22 +185,8 @@ export function TableTest(
       {
         accessorKey: 'collapse',
         header: () => 'Падение',
-        cell: ({row}) => (<DropdownMenu >
-          <DropdownMenuTrigger>
+        cell: ({row}) => (
              <div className="select-none">{row.getValue<string>('collapse').length}</div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-[100vw]" side="bottom" avoidCollisions={true} align="center">
-            <DropdownMenuLabel>{onSetupDepNameToRu(row.getValue('department'))}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <DepartmentTable logs={row.getValue('collapse')}/>
-            </DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-           
         ),
         footer: props => props.column.id,
       },
@@ -288,16 +194,7 @@ export function TableTest(
         accessorKey: 'pressureSores',
         header: () => 'Пролежни',
         cell: ({row}) => (
-          <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
-          <AccordionTrigger> <div>{row.getValue<string>('pressureSores').length}</div></AccordionTrigger>
-            <AccordionContent>
-              Yes. It adheres to the WAI-ARIA design pattern.
-              <DepartmentTable logs={row.getValue('pressureSores')}/>
-            </AccordionContent>
-          </AccordionItem>
-          </Accordion>
-           
+          <div>{row.getValue<string>('pressureSores').length}</div>
         ),
         footer: props => props.column.id,
       },
@@ -305,23 +202,7 @@ export function TableTest(
         accessorKey: 'identificationOfThePatientsIdentity',
         header: () => 'Идентификация личности пациента',
         cell: ({row}) => (
-          <Drawer>
-  <DrawerTrigger><div>{row.getValue<string>('identificationOfThePatientsIdentity').length}</div></DrawerTrigger>
-  <DrawerContent>
-    <DrawerHeader>
-      <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-      <DrawerDescription>This action cannot be undone.</DrawerDescription>
-    </DrawerHeader>
-    <DepartmentTable logs={row.getValue('identificationOfThePatientsIdentity')}/>
-    <DrawerFooter>
-     
-      <DrawerClose>
-      close
-      </DrawerClose>
-    </DrawerFooter>
-  </DrawerContent>
-</Drawer>
-          
+           <div>{row.getValue<string>('identificationOfThePatientsIdentity').length}</div>
         ),
         footer: props => props.column.id,
       },
@@ -393,18 +274,11 @@ export function TableTest(
       expanded,
     },
     onExpandedChange: setExpanded,
-    //getSubRows: row => row.logs,
     getExpandedRowModel: getExpandedRowModel(),
-    // filterFromLeafRows: true,
-    // maxLeafRowFilterDepth: 0,
     debugTable: true,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     getRowCanExpand: () => true,
   })
 
@@ -472,146 +346,23 @@ export function TableTest(
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        {/** 
-         *  <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-         * 
-        */}
-       
       </div>
-     {
-     /* 
-    <div className="p-2">
-      <div className="h-2" />
-      <table>
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => {
-                return (
-                  <th key={header.id} colSpan={header.colSpan}>
-                    {header.isPlaceholder ? null : (
-                      <div>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {header.column.getCanFilter() ? (
-                          <div>
-                            <Filter column={header.column} table={table} />
-                          </div>
-                        ) : null}
-                      </div>
-                    )}
-                  </th>
-                )
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => {
-            return (
-              <tr key={row.id}>
-                {row.getVisibleCells().map(cell => {
-                  return (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  )
-                })}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      <div className="h-2" />
-      <div className="flex items-center gap-2">
-        <button
-          className="border rounded p-1"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<<'}
-        </button>
-        <button
-          className="border rounded p-1"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<'}
-        </button>
-        <button
-          className="border rounded p-1"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>'}
-        </button>
-        <button
-          className="border rounded p-1"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>>'}
-        </button>
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{' '}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        <span className="flex items-center gap-1">
-          | Go to page:
-          <input
-            type="number"
-            min="1"
-            max={table.getPageCount()}
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={e => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0
-              table.setPageIndex(page)
-            }}
-            className="border p-1 rounded w-16"
-          />
-        </span>
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={e => {
-            table.setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>{table.getRowModel().rows.length} Rows</div>
-      <div>
-        <button onClick={() => rerender()}>Force Rerender</button>
-      </div>
-      <div>
-        <button>Refresh Data</button>
-      </div>
-      <label>Expanded State:</label>
-      <pre>{JSON.stringify(expanded, null, 2)}</pre>
-      <label>Row Selection State:</label>
-      <pre>{JSON.stringify(table.getState().rowSelection, null, 2)}</pre>
-    </div>
-    */
-    }
     </div>
   )
 }
 
+const renderSubComponent = ({ row, arrName }: { row: Row<IFinal>; arrName?: string }) => {
+  return (
+    <div style={{ fontSize: '10px' }}>
+      <code>{JSON.stringify(row.getValue('logs'), null, 2)}</code>
+    </div>
+  )
+}
+
+//<code>{JSON.stringify(row.original, null, 2)}</code>
+//<DepartmentTable logs={row.getValue(arrName)} />
+/**
+ 
   function Filter({
     column,
     table,
@@ -662,14 +413,4 @@ export function TableTest(
       />
     )
   }
-
-  const renderSubComponent = ({ row, arrName }: { row: Row<IFinal>; arrName?: string }) => {
-    return (
-      <div style={{ fontSize: '10px' }}>
-        <code>{JSON.stringify(row, null, 2)}</code>
-        
-      </div>
-    )
-  }
-//<code>{JSON.stringify(row.original, null, 2)}</code>
-//<DepartmentTable logs={row.getValue(arrName)} />
+ */
