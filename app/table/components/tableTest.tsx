@@ -91,6 +91,7 @@ export function TableTest(
     })
   }
   const [isFinal, setFinal] = useState<IFinal[]>([])
+  const [subRow, setSubRow] = useState<IZhus[]>()
   useEffect(() => {
     if(onFitFinalArrToTable(finalArr))
       setFinal(onFitFinalArrToTable(finalArr))
@@ -136,7 +137,6 @@ export function TableTest(
         }
   }
 
-
   const columns = useMemo<ColumnDef<IFinal>[]>(
     () => [
       {
@@ -146,14 +146,33 @@ export function TableTest(
             Отделение
           </>
         ),
-        cell: ({ row }) => (
+        cell: ({ row}) => (
           <div
             style={{
               paddingLeft: `${row.depth * 2}rem`,
             }}
           >
-            <div className="text-start font-medium ">
+            <div className="text-start font-medium " onClick={() =>  setSubRow(row.getValue('logs'))}>
+            {row.getValue<IZhus[]>('logs').length > 0
+            ?
             <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {onSetupDepNameToRu(row.getValue('department'))}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            onSetupDepNameToRu(row.getValue('department'))
+            }
+{/*            <button
               onClick={row.getToggleExpandedHandler()}
               {...{
                 //onClick: row.getToggleExpandedHandler(),
@@ -163,30 +182,44 @@ export function TableTest(
               {row.getCanExpand()? 
                 <>
                 {onSetupDepNameToRu(row.getValue('department'))}
-                {/*console.log(row._getAllCellsByColumnId())*/}
+                {/*console.log(row._getAllCellsByColumnId())}
+                {/*console.log(cell.getValue())/}
                 </>
                 : 
                 ''
-              }
-            {row.groupingColumnId}
-            </button>
+              </div>}
+
+            </button>*/}
             </div>
           </div>
         ),
         footer: props => props.column.id,
       },
-      //{
-      //  accessorKey: 'collapse',
-      //  id: 'lastName',
-      //  cell: info => info.getValue(),
-      //  header: () => <>Падение</>,
-      //  footer: props => props.column.id,
-      //},
       {
         accessorKey: 'collapse',
         header: () => 'Падение',
         cell: ({row}) => (
-             <div className="select-none">{row.getValue<string>('collapse').length}</div>
+             <div className="select-none" onClick={() =>  setSubRow(row.getValue('collapse'))}>
+            {row.getValue<IZhus[]>('collapse').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('collapse').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('collapse').length
+            }
+              </div>
         ),
         footer: props => props.column.id,
       },
@@ -194,7 +227,27 @@ export function TableTest(
         accessorKey: 'pressureSores',
         header: () => 'Пролежни',
         cell: ({row}) => (
-          <div>{row.getValue<string>('pressureSores').length}</div>
+          <div onClick={() =>  setSubRow(row.getValue('pressureSores'))}>
+            {row.getValue<IZhus[]>('pressureSores').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('pressureSores').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('pressureSores').length
+            }
+            </div>
         ),
         footer: props => props.column.id,
       },
@@ -202,7 +255,27 @@ export function TableTest(
         accessorKey: 'identificationOfThePatientsIdentity',
         header: () => 'Идентификация личности пациента',
         cell: ({row}) => (
-           <div>{row.getValue<string>('identificationOfThePatientsIdentity').length}</div>
+           <div onClick={() =>  setSubRow(row.getValue('identificationOfThePatientsIdentity'))}>
+            {row.getValue<IZhus[]>('identificationOfThePatientsIdentity').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('identificationOfThePatientsIdentity').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('identificationOfThePatientsIdentity').length
+            }
+            </div>
         ),
         footer: props => props.column.id,
       },
@@ -210,7 +283,27 @@ export function TableTest(
         accessorKey: 'anEventRelatedToAMedicalDeviceOrProduct',
         header: () => 'Событие, связанное с медицинским оборудованием или изделием',
         cell: ({row}) => (
-          <>{row.getValue<string>('anEventRelatedToAMedicalDeviceOrProduct').length}</>
+          <div  onClick={() =>  setSubRow(row.getValue('anEventRelatedToAMedicalDeviceOrProduct'))}>
+           {row.getValue<IZhus[]>('anEventRelatedToAMedicalDeviceOrProduct').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('anEventRelatedToAMedicalDeviceOrProduct').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('anEventRelatedToAMedicalDeviceOrProduct').length
+            }
+            </div>
         ),
         footer: props => props.column.id,
       },
@@ -218,7 +311,28 @@ export function TableTest(
         accessorKey: 'aDrugRelatedEvent',
         header: () => 'Событие, связанное с лекарственным средством',
         cell: ({row}) => (
-          <>{row.getValue<string>('aDrugRelatedEvent').length}</>
+          <div onClick={() =>  setSubRow(row.getValue('aDrugRelatedEvent'))}>
+          {row.getValue<IZhus[]>('aDrugRelatedEvent').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('aDrugRelatedEvent').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('aDrugRelatedEvent').length
+            }
+
+            </div>
         ),
         footer: props => props.column.id,
       },
@@ -226,7 +340,27 @@ export function TableTest(
         accessorKey: 'infectiousOrParasiticDisease',
         header: () => 'Инфекционное или паразитарное заболевание',
         cell: ({row}) => (
-          <>{row.getValue<string>('infectiousOrParasiticDisease').length}</>
+          <div onClick={() =>  setSubRow(row.getValue('infectiousOrParasiticDisease'))}>
+          {row.getValue<IZhus[]>('infectiousOrParasiticDisease').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('infectiousOrParasiticDisease').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('infectiousOrParasiticDisease').length
+            }
+            </div>
         ),
         footer: props => props.column.id,
       },
@@ -234,7 +368,28 @@ export function TableTest(
         accessorKey: 'iSMP',
         header: () => 'ИСМП (инфекции, связанные с медицинской помощью)',
         cell: ({row}) => (
-          <>{row.getValue<string>('iSMP').length}</>
+          <div onClick={() =>  setSubRow(row.getValue('iSMP'))}>
+          {row.getValue<IZhus[]>('iSMP').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('iSMP').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('iSMP').length
+            }
+           
+            </div>
         ),
         footer: props => props.column.id,
       },
@@ -242,7 +397,27 @@ export function TableTest(
         accessorKey: 'surgicalComplications',
         header: () => 'Хирургические осложнения',
         cell: ({row}) => (
-          <>{row.getValue<string>('surgicalComplications').length}</>
+          <div onClick={() =>  setSubRow(row.getValue('surgicalComplications'))}>
+           {row.getValue<IZhus[]>('surgicalComplications').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('surgicalComplications').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('surgicalComplications').length
+            }
+            </div>
         ),
         footer: props => props.column.id,
       },
@@ -250,7 +425,27 @@ export function TableTest(
         accessorKey: 'anotherUndesirableEvent',
         header: () => 'Другое',
         cell: ({row}) => (
-          <>{row.getValue<string>('anotherUndesirableEvent').length}</>
+          <div onClick={() =>  setSubRow(row.getValue('anotherUndesirableEvent'))}>
+           {row.getValue<IZhus[]>('anotherUndesirableEvent').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('anotherUndesirableEvent').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('anotherUndesirableEvent').length
+            }
+            </div>
         ),
         footer: props => props.column.id,
       },
@@ -258,7 +453,27 @@ export function TableTest(
         accessorKey: 'logs',
         header: () => 'Всего',
         cell: ({row}) => (
-          <>{row.getValue<string>('logs').length}</>
+          <div onClick={() =>  setSubRow(row.getValue('logs'))}>
+           {row.getValue<IZhus[]>('logs').length > 0
+            ?
+            <button
+              onClick={row.getToggleExpandedHandler()}
+              {...{
+                style: { cursor: 'pointer' },
+              }}
+            >
+              {row.getCanExpand()? 
+                <>
+                {row.getValue<string>('logs').length}
+                </>
+                : 
+                ''
+              }
+            </button>
+            :
+            row.getValue<string>('logs').length
+            }
+            </div>
         ),
         footer: props => props.column.id,
       },
@@ -324,9 +539,14 @@ export function TableTest(
                 {row.getIsExpanded() && (
                   <tr>
                     {/* 2nd row is a custom 1 cell row */}
+                    {/*console.log(row._getAllCellsByColumnId())*/}
                     <td colSpan={row.getVisibleCells().length}>
-                      {renderSubComponent({ row, arrName: '' })}
-
+                      {subRow && subRow?.length > 0
+                      ?
+                      renderSubComponent({ row: subRow })
+                      :
+                      null
+                    }
                     </td>
                   </tr>
                 )}
@@ -351,16 +571,17 @@ export function TableTest(
   )
 }
 
-const renderSubComponent = ({ row, arrName }: { row: Row<IFinal>; arrName?: string }) => {
+const renderSubComponent = ({ row }: { row: IZhus[]/*Row<IFinal>*/; arrName?: string }) => {
   return (
     <div style={{ fontSize: '10px' }}>
-      <code>{JSON.stringify(row.getValue('logs'), null, 2)}</code>
+      <DepartmentTable logs={row} />
     </div>
   )
 }
 
 //<code>{JSON.stringify(row.original, null, 2)}</code>
 //<DepartmentTable logs={row.getValue(arrName)} />
+////<code>{JSON.stringify(row.getValue('logs'), null, 2)}</code>
 /**
  
   function Filter({

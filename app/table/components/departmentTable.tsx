@@ -35,13 +35,13 @@ export
     logs.map((log) => {
       return <TableRow className="bg-green-50" key={log.id}>
       <TableCell className="font-medium ">{format(log.date, "PPP HH:mm", {locale: ru})}</TableCell>
-      <TableCell>{log.name} и дата рождения</TableCell>
-      <TableCell>{log.place}</TableCell>
+      <TableCell>{log.name} </TableCell>{/**и дата рождения */}
+      <TableCell className="w-2">{log.place}</TableCell>
 
       <TableCell>{log.cause}</TableCell>
       <TableCell>{log.circs}</TableCell>
       <TableCell>{log.gauge}</TableCell>
-      <TableCell>{log.note}</TableCell>
+      <TableCell className="w-2">{log.note}</TableCell>
       <TableCell>{log.liable}</TableCell>
 
     </TableRow>
@@ -57,8 +57,7 @@ export
 //<TableHead>вид нежелательного события</TableHead>
 //<TableCell>{log.event}</TableCell>
 //<TableCell>{log.comment}</TableCell>
-//<TableHead>комментарий</TableHead>
-
+//<TableHead>комментарий</TableHead>///<TableHead>вид нежелательного случая</TableHead>
 
 
 //old
