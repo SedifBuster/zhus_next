@@ -2,19 +2,19 @@ import { Department, Problem } from "@prisma/client";
 import FormRecord from "./components/formRecord";
 import QrTooltip from "./components/qrTooltip";
 
-export
+
   type UnitDep = {
   value: Department,
-  text: String,
+  text: string,
 }
 
 export
   type UnitIssue = {
   value: Problem,
-  text: String,
+  text: string,
 }
 
-export const departments: UnitDep[] = [
+ const departments = [
   {
     value: "Policlinic",
     text: "Поликлиника",

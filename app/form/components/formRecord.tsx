@@ -24,7 +24,13 @@ import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import DateTimePicker from "@/components/dateTime/dateTimePicker"
 import { toast } from "sonner"
-import { UnitDep, UnitIssue } from "../page"
+import { UnitIssue } from "../page"
+import { Department } from "@prisma/client"
+
+  type UnitDep = {
+  value: "Surgical" | "Pulmonology" | "Policlinic" | "Therapeutic" | "Reception" | "Neurology" | "Rehabilitation" | "Laboratory" | "Xray" | "Reanimation" | "Administration" | "Opp" | "Pao" | "Ceo" | "Aho",
+  text: string,
+}
 
 const formSchema = z.object({
     department: z.string(),
@@ -62,7 +68,10 @@ export
       postURL
     }: {
       problems: UnitIssue[]
-      departments: UnitDep[]
+      departments: {
+        value: string;
+        text: string;
+    }[]
       postLog: (url: string, postData: any) => Promise<number>
       postURL: string
     }

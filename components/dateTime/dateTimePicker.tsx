@@ -11,7 +11,7 @@ interface TimePickerDemoProps {
   setDate: (date: Date | undefined) => void;
 }
  
-export default function dateTimePicker({ date, setDate }: TimePickerDemoProps) {
+export default function DateTimePicker({ date, setDate }: TimePickerDemoProps) {
   const minuteRef = React.useRef<HTMLInputElement>(null);
   const hourRef = React.useRef<HTMLInputElement>(null);
   const secondRef = React.useRef<HTMLInputElement>(null);
