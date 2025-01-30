@@ -26,6 +26,7 @@ export
 default function Table(
 ) {
   const getUrl = 'http://localhost:5025/api/logs/all'
+  const oldUrl = 'http://localhost:5100/log'//http://192.168.0.148:5100/log
 
   async function onFetchData(url: string): Promise<IZhus[]> {
     'use server'
@@ -48,7 +49,30 @@ default function Table(
     }
   }
 
-  return <ZhusJournal onFetchData={onFetchData} getUrl={getUrl}/>
+  async function onFetchOldData(url: string): Promise<IZhus[]> {
+    'use server'
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+      const data = await response.json()
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      throw error;
+    }
+  }
+
+  console.log(onFetchOldData(oldUrl))
+
+  return <ZhusJournal onFetchData={onFetchData} onFetchOldData={onFetchOldData} oldUrl={oldUrl} getUrl={getUrl}/>
 }
  //const result = await onFetchData('http://localhost:5025/api/logs/all')
 /*

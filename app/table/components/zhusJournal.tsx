@@ -15,10 +15,14 @@ import DateTimePicker from "@/components/dateTime/dateTimePicker"
 export function ZhusJournal(
   {
     onFetchData,
-    getUrl
+    getUrl,
+    onFetchOldData,
+    oldUrl
   }: {
     onFetchData: (url: string) => Promise<IZhus[]>
+    onFetchOldData: (url: string) => Promise<IZhus[]>
     getUrl: string
+    oldUrl: string
   }
 ) {
 
@@ -31,9 +35,13 @@ export function ZhusJournal(
 
   useEffect(() => {
     async function onGetData() {
+      let resultOld = await onFetchOldData(oldUrl)
       let result = await onFetchData(getUrl)
-      if(result)
-        setFetchedData(result )
+      
+
+     
+      if(result && resultOld)
+        setFetchedData([...resultOld, ...result])
     }
     onGetData()
   }, [getUrl, onFetchData])
