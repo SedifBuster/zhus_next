@@ -18,6 +18,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -563,6 +564,50 @@ export function TableTest(
               </TableRow>
             )}
           </TableBody>
+          <TableFooter>
+        <TableRow className="bg-gray-200">
+          <TableCell>Итого</TableCell>
+          <TableCell className="text-center">
+            {isFinal.reduce((accum, curr) => accum + curr.collapse.length, 0)}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {isFinal.reduce((accum, curr) => accum + curr.pressureSores.length, 0)}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {isFinal.reduce((accum, curr) => accum + curr.identificationOfThePatientsIdentity.length, 0)}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {isFinal.reduce((accum, curr) => accum + curr.anEventRelatedToAMedicalDeviceOrProduct.length, 0)}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {isFinal.reduce((accum, curr) => accum + curr.aDrugRelatedEvent.length, 0)}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {isFinal.reduce((accum, curr) => accum + curr.infectiousOrParasiticDisease.length, 0)}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {isFinal.reduce((accum, curr) => accum + curr.iSMP.length, 0)}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {isFinal.reduce((accum, curr) => accum + curr.surgicalComplications.length, 0)}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {isFinal.reduce((accum, curr) => accum + curr.anotherUndesirableEvent.length, 0)}
+          </TableCell>
+
+          <TableCell className="text-center">
+            {isFinal.length}
+          </TableCell>
+        </TableRow>
+      </TableFooter>
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">

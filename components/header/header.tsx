@@ -2,13 +2,38 @@
 
 import Link from "next/link"
 import useRoutes from "../hooks/useRoutes"
-import { Button } from "../ui/button"
 import HeaderNavItem from "./headerNavItem"
+import AuthForm from "./authForm"
 
 export
   default function Header(
 ) {
   const routes = useRoutes()
+
+  const postURL = "http://localhost:5025/api/logs/all"
+
+  async function onPostData( postData: BodyInit): Promise<number> {
+
+    try {
+      const response = await fetch(postURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData)
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+      const data = await response.json()
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      throw Error;
+    }
+  }
+
 // pl-10 pr-10 pb-2
   return (
     <div className="flex border-b shadow-[0_50px_60px_-15px_rgba(0,0,0,0.07)]">
@@ -35,7 +60,9 @@ export
         </div>
       </div>
       {/*login in portal*/}
-      <div className="flex flex-col">
+      <div className="flex gap-6 justify-end">
+        <AuthForm postAuth={onPostData}/>
+        {/*<div>D/L</div>*/}
         {/*<Button variant={'default'}>войти в аккаунт</Button>*/}
       </div>
       </div>
