@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
 import { Toaster } from "@/components/ui/sonner";
+import localFont from 'next/font/local'
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,6 +18,17 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+const pfBeauSans = localFont({
+  src: [
+    {
+      path: '../public/fonts/PFBeauSansPro-Regular.woff',
+      weight: '500',
+      style: 'normal'
+    }
+  ],
+  variable: '--font-pfBeauSans'
+})
+
   //оптимизировать страницу таблицы придумать что то с кол-вом получаемых случаев
   //графики? https://ui.shadcn.com/docs/components/chart
   //прогресс бар при загрузке страницы https://ui.shadcn.com/docs/components/progress
@@ -28,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${inter.className} overflow-y-scroll h-[100vh]`}>
+      <body className={`${inter.className} overflow-y-scroll h-[100vh] ${pfBeauSans.className}`}>
         <main className="flex min-h-screen flex-col">
           <Header/>
           {children}
