@@ -9,6 +9,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
     Form,
     FormControl,
     FormField,
@@ -64,14 +72,15 @@ export
   }
 
 
-  return <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="outline">Войти в аккаунт</Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent className="w-56 p-4">
-      <DropdownMenuLabel>Введите логин и пароль от аккаунта портала</DropdownMenuLabel>
-      <DropdownMenuSeparator />
-      <Form {...form}>
+  return <Dialog>
+  <DialogTrigger className="border-2 h-12 p-2 text-center align center rounded-lg">Войти в аккаунт</DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Войти в аккаунт</DialogTitle>
+      
+
+    </DialogHeader>
+    <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
             control={form.control}
@@ -103,6 +112,7 @@ export
           <Button className="mt-4" type="submit">Отправить</Button>
         </form>
       </Form>
-    </DropdownMenuContent>
-  </DropdownMenu>
+  </DialogContent>
+</Dialog>
+     
 }

@@ -483,6 +483,11 @@ export function TableTest(
   )
   const [expanded, setExpanded] = useState<ExpandedState>({})
 
+
+  const onChangeComment = (id: number, text: string) => {
+    //api logic
+  }
+
   const table = useReactTable({
     data: isFinal,
     columns,
@@ -604,6 +609,7 @@ export function TableTest(
           </TableCell>
 
           <TableCell className="text-center">
+            {/**neeed refactor */}
             {isFinal.length}
           </TableCell>
         </TableRow>

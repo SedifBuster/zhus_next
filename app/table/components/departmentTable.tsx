@@ -26,6 +26,7 @@ export
       <TableHead>принятые меры</TableHead>
       <TableHead>примечание</TableHead>
       <TableHead>ответственный</TableHead>
+      <TableHead>комментарий</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody> 
@@ -43,6 +44,7 @@ export
       <TableCell>{log.gauge}</TableCell>
       <TableCell className="w-2">{log.note}</TableCell>
       <TableCell>{log.liable}</TableCell>
+      <TableCell>{log.comment}</TableCell>
 
     </TableRow>
     })
