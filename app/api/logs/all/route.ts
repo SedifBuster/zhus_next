@@ -55,6 +55,8 @@ export
       }
     })
 
+    console.log(log)
+
     return NextResponse.json(log.id)
   } catch ( error ) {
     console.log( error, 'LOG_CREATE_ERROR' )

@@ -25,8 +25,8 @@ export interface IFArray {
 export
 default function Table(
 ) {
-  const getUrl = 'http://localhost:5025/api/logs/all'
-  const oldUrl = 'http://localhost:5100/log'//http://192.168.0.148:5100/log
+  const getUrl = 'http://localhost:5020/api/logs'//http://localhost:5025/api/logs/all
+  const oldUrl = 'http://192.168.0.148:5100/log'//http://localhost:5100/log
 
   async function onFetchData(url: string): Promise<IZhus[]> {
     'use server'

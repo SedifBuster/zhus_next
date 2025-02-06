@@ -2,16 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -108,7 +100,7 @@ export
               </FormItem>
             )}
           />
-          <DropdownMenuSeparator />
+
           <Button className="mt-4" type="submit">Отправить</Button>
         </form>
       </Form>

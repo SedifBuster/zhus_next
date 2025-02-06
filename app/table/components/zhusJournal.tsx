@@ -37,7 +37,7 @@ export function ZhusJournal(
     async function onGetData() {
       let resultOld = await onFetchOldData(oldUrl)
       let result = await onFetchData(getUrl)
-      
+      console.log(result)
 
      
       if(result && resultOld)
@@ -63,6 +63,8 @@ export function ZhusJournal(
     }))
 
   }, [nowDate, prevDate, fetchedData])
+
+
 
   return <div className="container mx-auto flex flex-col items-center">
     <h1 className="font-bold text-lg">КГБУЗ «ВЛАДИВОСТОКСКАЯ КЛИНИЧЕСКАЯ БОЛЬНИЦА № 4»</h1>

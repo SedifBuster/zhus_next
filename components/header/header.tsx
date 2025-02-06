@@ -10,7 +10,7 @@ export
 ) {
   const routes = useRoutes()
 
-  const postURL = "http://localhost:5025/api/logs/all"
+  const postURL = "http://localhost:5020/api/auth/all"
 
   async function onPostData( postData: BodyInit): Promise<number> {
 

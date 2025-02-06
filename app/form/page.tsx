@@ -122,7 +122,7 @@ export
     },
   ]
 
-  const postURL = "http://localhost:5025/api/logs/all"
+  const postURL = "http://localhost:5020/api/logs"//http://localhost:5025/api/logs/all
 
   async function onPostData(url: string, postData: BodyInit): Promise<number> {
     "use server"

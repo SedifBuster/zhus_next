@@ -25,7 +25,16 @@ export
   //names from deparments
   let depsNamesArr: string[] = []
   ///filter by department name
-  const onFilterDataByDep = (data: IZhus[], dep: string) => { return {department: dep, logs: [...data.filter(log => log.department === dep)]}}
+  const onFilterDataByDep = (data: IZhus[], dep: string) => {
+
+    console.log("dep", dep)
+    console.log("data", data)
+    //TODO НАПИСАТЬ ФУНКЦИЮ ФИЛЬТРА ПО ОТДЕЛЕНИЮ
+
+    return {department: dep, logs: [...data.filter(log => log.department === dep)]}
+  }
+
+ 
   //...
   const onSetDepsNames = (data: IZhus[]) => {
     const namesSet = new Set<string>()
@@ -40,11 +49,14 @@ export
   const onSetDeps = () => {
     let arr = []
     for(let i = 0; i < depsNamesArr.length; i++) {
+      //console.log(onFilterDataByDep(onFetchData, depsNamesArr[i]))
       arr.push(onFilterDataByDep(onFetchData, depsNamesArr[i])) 
     }
     return arr
   }
   let finalArr = onSetDeps()
+
+ // console.log(finalArr)
 
   return (
       <TableTest finalArr={finalArr}/>
